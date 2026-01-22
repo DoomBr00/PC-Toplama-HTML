@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PC Oluşturucu Pro - Sistem Kurulumu</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: white;
+            padding: 20px;
+        }
+
+        .setup-container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #fff, #e0e0e0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .preset-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .preset-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1em;
+        }
+
+        .preset-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .components-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .component-card {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .component-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .component-title {
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .component-icon {
+            width: 24px;
+            height: 24px;
+            background: #fff;
+            border-radius: 4px;
+            display: inline-block;
+        }
+
+        select {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            font-size: 1em;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+
+        select:focus {
+            outline: 2px solid #667eea;
+            background: white;
+        }
+
+        .price-display {
+            font-weight: bold;
+            color: #4CAF50;
+            font-size: 1.1em;
+            text-align: right;
+        }
+
+        .compatibility-warning {
+            background: rgba(255, 193, 7, 0.2);
+            border: 1px solid rgba(255, 193, 7, 0.5);
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 15px;
+            display: none;
+        }
+
+        .warning-icon {
+            color: #FFC107;
+            margin-right: 10px;
+        }
+
+        .total-section {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .total-price {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #4CAF50;
+            margin-bottom: 10px;
+        }
+
+        .performance-indicator {
+            margin-top: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .performance-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .performance-score {
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .gaming { color: #FF6B6B; }
+        .productivity { color: #4ECDC4; }
+        .budget { color: #45B7D1; }
+
+        .build-button {
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2em;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 15px 10px;
+        }
+
+        .build-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.4);
+        }
+
+        .save-load-section {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .save-load-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 0 10px;
+            transition: all 0.3s ease;
+        }
+
+        .save-load-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .specs-summary {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            text-align: left;
+        }
+
+        .specs-summary h3 {
+            margin-bottom: 15px;
+            color: #fff;
+        }
+
+        .spec-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            padding: 5px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .benchmark-section {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .benchmark-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .benchmark-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .fps-display {
+            font-size: 2em;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+
+        .game-name {
+            margin-top: 10px;
+            opacity: 0.9;
+        }
+
+        @media (max-width: 768px) {
+            .setup-container {
+                padding: 20px;
+            }
+            
+            .components-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .preset-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="setup-container">
+        <div class="header">
+            <h1>🖥️ PC Oluşturucu Pro</h1>
+            <p>Hayalinizdeki bilgisayarı oluşturun ve performansını görün</p>
+        </div>
+
+        <div class="preset-buttons">
+            <button class="preset-btn" onclick="loadPreset('budget')">💰 Bütçe Dostu (₺15.000)</button>
+            <button class="preset-btn" onclick="loadPreset('gaming')">🎮 Oyuncu (₺25.000)</button>
+            <button class="preset-btn" onclick="loadPreset('workstation')">💼 İş İstasyonu (₺35.000)</button>
+            <button class="preset-btn" onclick="loadPreset('enthusiast')">🚀 Meraklı (₺50.000+)</button>
+        </div>
+
+        <div class="components-grid">
+            <div class="component-card">
+                <div class="component-title">
+                    <span class="component-icon"></span>
+                    İşlemci (CPU)
+                </div>
+                <select id="cpu" onchange="updatePrice()">
+                    <option value="0">Seçiniz...</option>
+                    <option value="2800" data-performance="60">Intel Core i3-12100F - ₺2.800</option>
+                    <option value="3500" data-performance="75">Intel Core i5-12400F - ₺3.500</option>
+                    <option value="4200" data-performance="85">Intel Core i5-13600KF - ₺4.200</option>
+                    <option value="5800" data-performance="92">Intel Core i7-13700KF - ₺5.800</option>
+                    <option value="8500" data-performance="98">Intel Core i9-13900KF - ₺8.500</option>
+                    <option value="3200" data-performance="72">AMD Ryzen 5 5600X - ₺3.200</option>
+                    <option value="4800" data-performance="88">AMD Ryzen 7 5800X3D - ₺4.800</option>
+                    <option value="6200" data-performance="95">AMD Ryzen 9 5900X - ₺6.200</option>
+                </select>
+                <div class="price-display" id="cpu-price">₺0</div>
+            </div>
+
+            <div class="component-card">
+                <div class="component-title">
+                    <span class="component-icon"></span>
+                    Anakart
+                </div>
+                <select id="motherboard" onchange="updatePrice()">
+                    <option value="0">Seçiniz...</option>
+                    <option value="1200">MSI B450M PRO-VDH MAX - ₺1.200</option>
+                    <option value="1800">ASUS PRIME B550M-A - ₺1.800</option>
+                    <option value="2500">MSI MAG B550 TOMAHAWK - ₺2.500</option>
+                    <option value="3200">ASUS ROG STRIX B550-F - ₺3.200</option>
+                    <option value="4500">ASUS ROG CROSSHAIR VIII - ₺4.500</option>
+                    <option value="2800">MSI Z690-A PRO - ₺2.800</option>
+                    <option value="3800">ASUS ROG STRIX Z690-E - ₺3.800</option>
+                </select>
+                <div class="price-display" id="motherboard-price">₺0</div>
+            </div>
+
+            <div class="component-card">
+                <div class="component-title">
+                    <span class="component-icon"></span>
+                    RAM Bellek
+                </div>
+                <select id="ram" onchange="updatePrice()">
+                    <option value="0">Seçiniz...</option>
+                    <option value="800" data-performance="50">8GB DDR4 3200MHz - ₺800</option>
+                    <option value="1400" data-performance="75">16GB DDR4 3200MHz - ₺1.400</option>
+                    <option value="2200" data-performance="85">32GB DDR4 3200MHz - ₺2.200</option>
+                    <option value="1600" data-performance="80">16GB DDR5 5600MHz - ₺1.600</option>
+                    <option value="2800" data-performance="90">32GB DDR5 5600MHz - ₺2.800</option>
+                    <option value="4200" data-performance="95">64GB DDR5 5600MHz - ₺4.200</option>
+                </select>
+                <div class="price-display" id="ram-price">₺0</div>
+            </div>
+
+            <div class="component-card">
+                <div class="component-title">
+                    <span class="component-icon"></span>
+                    Ekran Kartı (GPU)
+                </div>
+                <select id="gpu" onchange="updatePrice()">
+                    <option value="0">Seçiniz...</option>
+                    <option value="3800" data-performance="55">NVIDIA GTX 1650 - ₺3.800</option>
+                    <option value="4500" data-performance="65">NVIDIA GTX 1660 Super - ₺4.500</option>
+                    <option value="6800" data-performance="75">NVIDIA RTX 3060 - ₺6.800</option>
+                    <option value="9200" data-performance="85">NVIDIA RTX 3070 - ₺9.200</option>
+                    <option value="12500" data-performance="92">NVIDIA RTX 4070 - ₺12.500</option>
+                    <option value="18000" data-performance="96">NVIDIA RTX 4080 - ₺18.000</option>
+                    <option value="28000" data-performance="100">NVIDIA RTX 4090 - ₺28.000</option>
+                    <option value="5200" data-performance="70">AMD RX 6600 XT - ₺5.200</option>
+                    <option value="7800" data-performance="80">AMD RX 6700 XT - ₺7.800</option>
+                    <option value="11500" data-performance="88">AMD RX 7700 XT - ₺11.500</option>
+                </select>
+                <div class="price-display" id="gpu-price">₺0</div>
+            </div>
+
+            <div class="component-card">
+                <div class="component-title">
+                    <span class="component-icon"></span>
+                    Depolama (SSD)
+                </div>
+                <select id="storage" onchange="updatePrice()">
+                    <option value="0">Seçiniz...</option>
+                    <option value="600">250GB NVMe SSD - ₺600</option>
+                    <option value="900">500GB NVMe SSD - ₺900</option>
+                    <option value="1400">1TB NVMe SSD - ₺1.400</option>
+                    <option value="2200">2TB NVMe SSD - ₺2.200</option>
+                    <option value="1800">1TB Samsung 980 PRO - ₺1.800</option>
+                    <option value="3200">2TB Samsung 980 PRO - ₺3.200</option>
+                </select>
+                <div class="price-display" id="storage-price">₺0</div>
+            </div>
+
+            <div class="component-card">
+                <div class="component-title">
+                    <span class="component-icon"></span>
+                    Güç Kaynağı (PSU)
+                </div>
+                <select id="psu" onchange="updatePrice()">
+                    <option value="0">Seçiniz...</option>
+                    <option value="800">500W 80+ Bronze - ₺800</option>
+                    <option value="1200">650W 80+ Gold - ₺1.200</option>
+                    <option value="1600">750W 80+ Gold - ₺1.600</option>
+                    <option value="2200">850W 80+ Platinum - ₺2.200</option>
+                    <option value="2800">1000W 80+ Titanium - ₺2.800</option>
+                </select>
+                <div class="price-display" id="psu-price">₺0</div>
+            </div>
+
+            <div class="component-card">
+                <div class="component-title">
+                    <span class="component-icon"></span>
+                    Kasa
+                </div>
+                <select id="case" onchange="updatePrice()">
+                    <option value="0">Seçiniz...</option>
+                    <option value="400">Temel ATX Kasa - ₺400</option>
+                    <option value="800">Corsair 4000D - ₺800</option>
+                    <option value="1200">NZXT H510 Elite - ₺1.200</option>
+                    <option value="1800">Lian Li PC-O11 Dynamic - ₺1.800</option>
+                    <option value="2500">Corsair 5000X RGB - ₺2.500</option>
+                </select>
+                <div class="price-display" id="case-price">₺0</div>
+            </div>
+
+            <div class="component-card">
+                <div class="component-title">
+                    <span class="component-icon"></span>
+                    CPU Soğutucu
+                </div>
+                <select id="cooler" onchange="updatePrice()">
+                    <option value="0">Seçiniz...</option>
+                    <option value="200">Stock Soğutucu - ₺200</option>
+                    <option value="400">Cooler Master Hyper 212 - ₺400</option>
+                    <option value="800">Noctua NH-D15 - ₺800</option>
+                    <option value="1200">Corsair H100i RGB - ₺1.200</option>
+                    <option value="1800">NZXT Kraken X63 - ₺1.800</option>
+                    <option value="2400">Corsair H150i Elite - ₺2.400</option>
+                </select>
+                <div class="price-display" id="cooler-price">₺0</div>
+            </div>
+        </div>
+
+        <div class="compatibility-warning" id="compatibility-warning">
+            <span class="warning-icon">⚠️</span>
+            <span id="warning-text">Uyumluluk uyarısı burada görünecek</span>
+        </div>
+
+        <div class="total-section">
+            <div class="total-price" id="total-price">₺0</div>
+            <p>Toplam Sistem Fiyatı</p>
+            
+            <div class="performance-indicator">
+                <div class="performance-card">
+                    <div class="performance-score gaming" id="gaming-score">0/10</div>
+                    <div>Oyun Performansı</div>
+                </div>
+                <div class="performance-card">
+                    <div class="performance-score productivity" id="productivity-score">0/10</div>
+                    <div>İş Performansı</div>
+                </div>
+                <div class="performance-card">
+                    <div class="performance-score budget" id="budget-score">0/10</div>
+                    <div>Fiyat/Performans</div>
+                </div>
+            </div>
+
+            <button class="build-button" onclick="showSpecs()">🚀 Sistemi Oluştur</button>
+            <button class="build-button" onclick="showBenchmarks()" style="background: linear-gradient(45deg, #FF6B6B, #FF5252);">📊 Benchmark Sonuçları</button>
+        </div>
+
+        <div class="save-load-section">
+            <h3>💾 Yapılandırma Yönetimi</h3>
+            <button class="save-load-btn" onclick="saveConfig()">Kaydet</button>
+            <button class="save-load-btn" onclick="loadConfig()">Yükle</button>
+            <button class="save-load-btn" onclick="shareConfig()">Paylaş</button>
+            <button class="save-load-btn" onclick="resetConfig()">Sıfırla</button>
+        </div>
+
+        <div class="specs-summary" id="specs-summary" style="display: none;">
+            <h3>📋 Sistem Özellikleri</h3>
+            <div id="specs-list"></div>
+        </div>
+
+        <div class="benchmark-section" id="benchmark-section" style="display: none;">
+            <h3>🎮 Tahmini Oyun Performansı (1080p)</h3>
+            <div class="benchmark-grid" id="benchmark-grid">
+                <!-- Benchmark kartları buraya eklenecek -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const presets = {
+            budget: {
+                cpu: "3200", motherboard: "1800", ram: "1400", gpu: "4500",
+                storage: "900", psu: "1200", case: "400", cooler: "400"
+            },
+            gaming: {
+                cpu: "4200", motherboard: "2500", ram: "1600", gpu: "9200",
+                storage: "1400", psu: "1600", case: "800", cooler: "800"
+            },
+            workstation: {
+                cpu: "5800", motherboard: "3200", ram: "2800", gpu: "12500",
+                storage: "1800", psu: "2200", case: "1200", cooler: "1200"
+            },
+            enthusiast: {
+                cpu: "8500", motherboard: "4500", ram: "4200", gpu: "28000",
+                storage: "3200", psu: "2800", case: "2500", cooler: "2400"
+            }
+        };
+
+        function loadPreset(presetName) {
+            const preset = presets[presetName];
+            Object.keys(preset).forEach(component => {
+                document.getElementById(component).value = preset[component];
+            });
+            updatePrice();
+        }
+
+        function updatePrice() {
+            const components = ['cpu', 'motherboard', 'ram', 'gpu', 'storage', 'psu', 'case', 'cooler'];
+            let total = 0;
+            let cpuPerf = 0, gpuPerf = 0, ramPerf = 0;
+
+            components.forEach(component => {
+                const select = document.getElementById(component);
+                const price = parseInt(select.value) || 0;
+                total += price;
+                
+                const priceDisplay = document.getElementById(component + '-price');
+                priceDisplay.textContent = price > 0 ? `₺${price.toLocaleString('tr-TR')}` : '₺0';
+
+                // Performans verilerini topla
+                const selectedOption = select.options[select.selectedIndex];
+                if (selectedOption && selectedOption.dataset.performance) {
+                    const perf = parseInt(selectedOption.dataset.performance);
+                    if (component === 'cpu') cpuPerf = perf;
+                    if (component === 'gpu') gpuPerf = perf;
+                    if (component === 'ram') ramPerf = perf;
+                }
+            });
+
+            document.getElementById('total-price').textContent = `₺${total.toLocaleString('tr-TR')}`;
+            
+            // Performans skorlarını hesapla
+            const gamingScore = Math.round((gpuPerf * 0.7 + cpuPerf * 0.3) / 10);
+            const productivityScore = Math.round((cpuPerf * 0.6 + ramPerf * 0.4) / 10);
+            const budgetScore = total > 0 ? Math.max(1, Math.min(10, Math.round(((gamingScore + productivityScore) * 50000) / total))) : 0;
+
+            document.getElementById('gaming-score').textContent = `${gamingScore}/10`;
+            document.getElementById('productivity-score').textContent = `${productivityScore}/10`;
+            document.getElementById('budget-score').textContent = `${budgetScore}/10`;
+
+            checkCompatibility();
+        }
+
+        function checkCompatibility() {
+            const cpu = document.getElementById('cpu').value;
+            const motherboard = document.getElementById('motherboard').value;
+            const psu = document.getElementById('psu').value;
+            const gpu = document.getElementById('gpu').value;
+            
+            let warnings = [];
+            
+            // PSU uyumluluk kontrolü
+            if (gpu === "28000" && parseInt(psu) < 2200) {
+                warnings.push("RTX 4090 için en az 850W güç kaynağı önerilir");
+            }
+            
+            // CPU-Anakart uyumluluk kontrolü
+            if (cpu === "8500" && motherboard === "1200") {
+                warnings.push("i9 işlemci için daha güçlü anakart önerilir");
+            }
+
+            const warningDiv = document.getElementById('compatibility-warning');
+            if (warnings.length > 0) {
+                document.getElementById('warning-text').textContent = warnings.join(', ');
+                warningDiv.style.display = 'block';
+            } else {
+                warningDiv.style.display = 'none';
+            }
+        }
+
+        function showSpecs() {
+            const components = {
+                'cpu': 'İşlemci',
+                'motherboard': 'Anakart', 
+                'ram': 'RAM',
+                'gpu': 'Ekran Kartı',
+                'storage': 'Depolama',
+                'psu': 'Güç Kaynağı',
+                'case': 'Kasa',
+                'cooler': 'Soğutucu'
+            };
+
+            let specsList = '';
+            let hasComponents = false;
+
+            Object.keys(components).forEach(component => {
+                const select = document.getElementById(component);
+                if (select.value !== '0') {
+                    const selectedText = select.options[select.selectedIndex].text;
+                    specsList += `
+                        <div class="spec-item">
+                            <span>${components[component]}:</span>
+                            <span>${selectedText}</span>
+                        </div>
+                    `;
+                    hasComponents = true;
+                }
+            });
+
+            if (hasComponents) {
+                document.getElementById('specs-list').innerHTML = specsList;
+                document.getElementById('specs-summary').style.display = 'block';
+                document.getElementById('specs-summary').scrollIntoView({ behavior: 'smooth' });
+            } else {
+                alert('Lütfen önce bileşenleri seçiniz!');
+            }
+        }
+
+        function showBenchmarks() {
+            const gpuSelect = document.getElementById('gpu');
+            const cpuSelect = document.getElementById('cpu');
+            
+            if (gpuSelect.value === '0' || cpuSelect.value === '0') {
+                alert('Benchmark için CPU ve GPU seçmelisiniz!');
+                return;
+            }
+
+            const gpuPerf = parseInt(gpuSelect.options[gpuSelect.selectedIndex].dataset.performance) || 0;
+            const cpuPerf = parseInt(cpuSelect.options[cpuSelect.selectedIndex].dataset.performance) || 0;
+            
+            const games = [
+                { name: 'Cyberpunk 2077', baseScore: 45 },
+                { name: 'Call of Duty MW3', baseScore: 85 },
+                { name: 'Fortnite', baseScore: 120 },
+                { name: 'Valorant', baseScore: 200 },
+                { name: 'GTA V', baseScore: 90 },
+                { name: 'Apex Legends', baseScore: 110 }
+            ];
+
+            let benchmarkHTML = '';
+            games.forEach(game => {
+                const fps = Math.round(game.baseScore * (gpuPerf / 100) * (cpuPerf / 100));
+                const fpsColor = fps >= 60 ? '#4CAF50' : fps >= 30 ? '#FFC107' : '#FF5252';
+                
+                benchmarkHTML += `
+                    <div class="benchmark-card">
+                        <div class="fps-display" style="color: ${fpsColor}">${fps} FPS</div>
+                        <div class="game-name">${game.name}</div>
+                    </div>
+                `;
+            });
+
+            document.getElementById('benchmark-grid').innerHTML = benchmarkHTML;
+            document.getElementById('benchmark-section').style.display = 'block';
+            document.getElementById('benchmark-section').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function saveConfig() {
+            const config = {};
+            const components = ['cpu', 'motherboard', 'ram', 'gpu', 'storage', 'psu', 'case', 'cooler'];
+            
+            components.forEach(component => {
+                config[component] = document.getElementById(component).value;
+            });
+            
+            localStorage.setItem('pcBuilderConfig', JSON.stringify(config));
+            alert('Yapılandırma kaydedildi! 💾');
+        }
+
+        function loadConfig() {
+            const saved = localStorage.getItem('pcBuilderConfig');
+            if (saved) {
+                const config = JSON.parse(saved);
+                Object.keys(config).forEach(component => {
+                    const element = document.getElementById(component);
+                    if (element) element.value = config[component];
+                });
+                updatePrice();
+                alert('Yapılandırma yüklendi! 📂');
+            } else {
+                alert('Kaydedilmiş yapılandırma bulunamadı!');
+            }
+        }
+
+        function shareConfig() {
+            const config = {};
+            const components = ['cpu', 'motherboard', 'ram', 'gpu', 'storage', 'psu', 'case', 'cooler'];
+            
+            components.forEach(component => {
+                config[component] = document.getElementById(component).value;
+            });
+            
+            const configString = btoa(JSON.stringify(config));
+            const shareUrl = `${window.location.href}?config=${configString}`;
+            
+            navigator.clipboard.writeText(shareUrl).then(() => {
+                alert('Paylaşım linki kopyalandı! 🔗');
+            });
+        }
+
+        function resetConfig() {
+            if (confirm('Tüm seçimleri sıfırlamak istediğinizden emin misiniz?')) {
+                const components = ['cpu', 'motherboard', 'ram', 'gpu', 'storage', 'psu', 'case', 'cooler'];
+                components.forEach(component => {
+                    document.getElementById(component).value = '0';
+                });
+                updatePrice();
+            }
+        }
+
+        // Sayfa yüklendiğinde URL'den config yükle
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const configParam = urlParams.get('config');
+            
+            if (configParam) {
+                try {
+                    const config = JSON.parse(atob(configParam));
+                    Object.keys(config).forEach(component => {
+                        const element = document.getElementById(component);
+                        if (element) element.value = config[component];
+                    });
+                } catch (e) {
+                    console.log('Config yüklenemedi');
+                }
+            }
+            
+            updatePrice();
+        };
+    </script>
+</body>
+</html>

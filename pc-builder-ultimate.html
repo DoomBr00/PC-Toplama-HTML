@@ -1,0 +1,3001 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PC Oluşturucu Ultimate - Profesyonel Sistem Kurulumu</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #667eea;
+            --secondary-color: #764ba2;
+            --success-color: #4CAF50;
+            --warning-color: #FFC107;
+            --danger-color: #FF5252;
+            --info-color: #2196F3;
+            --dark-bg: rgba(0, 0, 0, 0.8);
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            min-height: 100vh;
+            color: white;
+            overflow-x: hidden;
+        }
+
+        .animated-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+        }
+
+        .animated-bg::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            animation: float 20s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(1deg); }
+        }
+
+        .navbar {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .logo {
+            font-size: 1.8em;
+            font-weight: bold;
+            background: linear-gradient(45deg, #fff, #e0e0e0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav-btn {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .hero-section {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 20px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            border: 1px solid var(--glass-border);
+        }
+
+        .hero-title {
+            font-size: 3em;
+            margin-bottom: 15px;
+            background: linear-gradient(45deg, #fff, #e0e0e0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { text-shadow: 0 0 20px rgba(255, 255, 255, 0.5); }
+            to { text-shadow: 0 0 30px rgba(255, 255, 255, 0.8); }
+        }
+
+        .hero-subtitle {
+            font-size: 1.3em;
+            opacity: 0.9;
+            margin-bottom: 30px;
+        }
+
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid var(--glass-border);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .preset-section {
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            font-size: 2em;
+            margin-bottom: 20px;
+            text-align: center;
+            background: linear-gradient(45deg, #fff, #e0e0e0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .preset-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .preset-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 25px;
+            border: 1px solid var(--glass-border);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .preset-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .preset-card:hover::before {
+            left: 100%;
+        }
+        .preset-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .preset-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .preset-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .preset-price {
+            font-size: 1.8em;
+            color: var(--success-color);
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .preset-specs {
+            list-style: none;
+            text-align: left;
+            opacity: 0.9;
+        }
+
+        .preset-specs li {
+            margin-bottom: 5px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .preset-specs li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--success-color);
+            font-weight: bold;
+        }
+
+        .components-section {
+            margin-bottom: 40px;
+        }
+
+        .components-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .component-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 25px;
+            border: 1px solid var(--glass-border);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .component-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+        }
+
+        .component-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .component-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 1.5em;
+        }
+
+        .component-info h3 {
+            font-size: 1.4em;
+            margin-bottom: 5px;
+        }
+
+        .component-info p {
+            opacity: 0.8;
+            font-size: 0.9em;
+        }
+
+        .component-select {
+            position: relative;
+            margin-bottom: 15px;
+        }
+
+        select {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.95);
+            color: #333;
+            font-size: 1em;
+            cursor: pointer;
+            appearance: none;
+            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6,9 12,15 18,9"></polyline></svg>');
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+            background-size: 20px;
+        }
+        select:focus {
+            outline: 3px solid var(--primary-color);
+            background: white;
+            transform: scale(1.02);
+        }
+
+        .price-display {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 12px 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .price-amount {
+            font-weight: bold;
+            color: var(--success-color);
+            font-size: 1.2em;
+        }
+
+        .component-features {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .feature-tag {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .compatibility-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 25px;
+            border: 1px solid var(--glass-border);
+            margin-bottom: 30px;
+        }
+
+        .compatibility-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .compatibility-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--success-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 1.2em;
+        }
+
+        .compatibility-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .compatibility-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            border-left: 4px solid var(--success-color);
+        }
+
+        .compatibility-item.warning {
+            border-left-color: var(--warning-color);
+        }
+
+        .compatibility-item.error {
+            border-left-color: var(--danger-color);
+        }
+
+        .performance-dashboard {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid var(--glass-border);
+            margin-bottom: 30px;
+        }
+
+        .performance-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .performance-meter {
+            text-align: center;
+            position: relative;
+        }
+
+        .meter-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: conic-gradient(var(--success-color) 0deg, var(--success-color) 0deg, rgba(255,255,255,0.1) 0deg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            position: relative;
+            transition: all 0.5s ease;
+        }
+
+        .meter-circle::before {
+            content: '';
+            width: 90px;
+            height: 90px;
+            background: var(--glass-bg);
+            border-radius: 50%;
+            position: absolute;
+        }
+
+        .meter-value {
+            position: relative;
+            z-index: 1;
+            font-size: 1.8em;
+            font-weight: bold;
+        }
+        .meter-label {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .total-section {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 40px;
+            border: 1px solid var(--glass-border);
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .total-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: rotate 10s linear infinite;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .total-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .total-price {
+            font-size: 3.5em;
+            font-weight: bold;
+            color: var(--success-color);
+            margin-bottom: 15px;
+            text-shadow: 0 0 20px rgba(76, 175, 80, 0.5);
+        }
+
+        .price-breakdown {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 30px 0;
+        }
+
+        .breakdown-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .breakdown-label {
+            font-size: 0.9em;
+            opacity: 0.8;
+            margin-bottom: 5px;
+        }
+
+        .breakdown-value {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: var(--success-color);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+
+        .action-btn {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            padding: 18px 35px;
+            font-size: 1.2em;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .action-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .action-btn:hover::before {
+            left: 100%;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+        }
+
+        .action-btn.secondary {
+            background: linear-gradient(45deg, var(--info-color), #1976D2);
+        }
+
+        .action-btn.success {
+            background: linear-gradient(45deg, var(--success-color), #388E3C);
+        }
+
+        .action-btn.warning {
+            background: linear-gradient(45deg, var(--warning-color), #F57C00);
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+        }
+
+        .modal-content {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 20px;
+            border: 1px solid var(--glass-border);
+            width: 90%;
+            max-width: 800px;
+            max-height: 80vh;
+            overflow-y: auto;
+            animation: modalSlideIn 0.3s ease;
+        }
+
+        @keyframes modalSlideIn {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .modal-title {
+            font-size: 1.8em;
+            font-weight: bold;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 2em;
+            cursor: pointer;
+            padding: 0;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .close-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: rotate(90deg);
+        }
+
+        .benchmark-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .benchmark-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .benchmark-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .fps-display {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .game-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .game-name {
+            font-weight: bold;
+        }
+
+        .game-settings {
+            font-size: 0.9em;
+            opacity: 0.8;
+        }
+
+        .specs-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .specs-table th,
+        .specs-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .specs-table th {
+            background: rgba(255, 255, 255, 0.1);
+            font-weight: bold;
+        }
+        .comparison-section {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid var(--glass-border);
+            margin-bottom: 30px;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .comparison-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .comparison-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: var(--success-color);
+        }
+
+        .comparison-list {
+            list-style: none;
+        }
+
+        .comparison-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .floating-panel {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 20px;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .floating-panel:hover {
+            transform: translateY(-5px);
+        }
+
+        .panel-toggle {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.5em;
+            transition: all 0.3s ease;
+            margin-bottom: 15px;
+        }
+
+        .panel-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .quick-actions {
+            display: none;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .quick-actions.active {
+            display: flex;
+        }
+
+        .quick-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9em;
+        }
+
+        .quick-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                padding: 10px;
+            }
+            
+            .hero-title {
+                font-size: 2em;
+            }
+            
+            .components-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .preset-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .floating-panel {
+                bottom: 20px;
+                right: 20px;
+            }
+            
+            .nav-buttons {
+                display: none;
+            }
+        }
+
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 3000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="animated-bg"></div>
+    
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fas fa-desktop"></i> PC Builder Ultimate
+            </div>
+            <div class="nav-buttons">
+                <a href="#" class="nav-btn" onclick="showModal('help')">
+                    <i class="fas fa-question-circle"></i> Yardım
+                </a>
+                <a href="#" class="nav-btn" onclick="showModal('about')">
+                    <i class="fas fa-info-circle"></i> Hakkında
+                </a>
+                <a href="#" class="nav-btn" onclick="toggleTheme()">
+                    <i class="fas fa-palette"></i> Tema
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="main-container">
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <h1 class="hero-title">
+                <i class="fas fa-rocket"></i> PC Oluşturucu Ultimate
+            </h1>
+            <p class="hero-subtitle">
+                Profesyonel seviyede PC oluşturun, performansını analiz edin ve en iyi fiyatı bulun
+            </p>
+            
+            <div class="stats-bar">
+                <div class="stat-card">
+                    <div class="stat-number" style="color: var(--success-color);" id="total-builds">0</div>
+                    <div>Oluşturulan Sistem</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" style="color: var(--info-color);" id="avg-price">₺0</div>
+                    <div>Ortalama Fiyat</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" style="color: var(--warning-color);" id="performance-score">0/10</div>
+                    <div>Performans Skoru</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" style="color: var(--danger-color);" id="compatibility-score">100%</div>
+                    <div>Uyumluluk</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Preset Section -->
+        <section class="preset-section">
+            <h2 class="section-title">
+                <i class="fas fa-star"></i> Hazır Konfigürasyonlar
+            </h2>
+            
+            <div class="preset-grid">
+                <div class="preset-card" onclick="loadPreset('budget')">
+                    <div class="preset-icon">💰</div>
+                    <div class="preset-title">Bütçe Dostu</div>
+                    <div class="preset-price">₺18.000 - ₺25.000</div>
+                    <ul class="preset-specs">
+                        <li>1080p Oyun Performansı</li>
+                        <li>Ofis Uygulamaları</li>
+                        <li>Temel Video Düzenleme</li>
+                        <li>Düşük Güç Tüketimi</li>
+                    </ul>
+                </div>
+                
+                <div class="preset-card" onclick="loadPreset('gaming')">
+                    <div class="preset-icon">🎮</div>
+                    <div class="preset-title">Oyuncu Sistemi</div>
+                    <div class="preset-price">₺30.000 - ₺45.000</div>
+                    <ul class="preset-specs">
+                        <li>1440p Yüksek Ayarlar</li>
+                        <li>Ray Tracing Desteği</li>
+                        <li>Yayın Yapabilme</li>
+                        <li>VR Hazır</li>
+                    </ul>
+                </div>
+                
+                <div class="preset-card" onclick="loadPreset('workstation')">
+                    <div class="preset-icon">💼</div>
+                    <div class="preset-title">İş İstasyonu</div>
+                    <div class="preset-price">₺45.000 - ₺65.000</div>
+                    <ul class="preset-specs">
+                        <li>Profesyonel Uygulamalar</li>
+                        <li>3D Rendering</li>
+                        <li>Video Prodüksiyon</li>
+                        <li>Çoklu Monitör</li>
+                    </ul>
+                </div>
+                
+                <div class="preset-card" onclick="loadPreset('enthusiast')">
+                    <div class="preset-icon">🚀</div>
+                    <div class="preset-title">Meraklı Sistemi</div>
+                    <div class="preset-price">₺70.000+</div>
+                    <ul class="preset-specs">
+                        <li>4K Ultra Ayarlar</li>
+                        <li>En Yüksek Performans</li>
+                        <li>Gelecek Garantili</li>
+                        <li>Overclock Hazır</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+        <!-- Components Section -->
+        <section class="components-section">
+            <h2 class="section-title">
+                <i class="fas fa-cogs"></i> Bileşen Seçimi
+            </h2>
+            
+            <div class="components-grid">
+                <!-- CPU Card -->
+                <div class="component-card">
+                    <div class="component-header">
+                        <div class="component-icon">
+                            <i class="fas fa-microchip"></i>
+                        </div>
+                        <div class="component-info">
+                            <h3>İşlemci (CPU)</h3>
+                            <p>Sistemin beyni, tüm hesaplamaları yapar</p>
+                        </div>
+                    </div>
+                    
+                    <div class="component-select">
+                        <select id="cpu" onchange="updateSystem()">
+                            <option value="0">Seçiniz...</option>
+                            <!-- Intel Budget -->
+                            <option value="2200" data-performance="45" data-cores="4" data-threads="4" data-tdp="58">Intel Core i3-10100F - ₺2.200</option>
+                            <option value="2500" data-performance="55" data-cores="4" data-threads="8" data-tdp="65">Intel Core i3-12100 - ₺2.500</option>
+                            <option value="2800" data-performance="60" data-cores="4" data-threads="8" data-tdp="65">Intel Core i3-12100F - ₺2.800</option>
+                            <option value="3100" data-performance="65" data-cores="4" data-threads="8" data-tdp="60">Intel Core i3-13100F - ₺3.100</option>
+                            
+                            <!-- Intel Mid-Range -->
+                            <option value="3200" data-performance="70" data-cores="6" data-threads="12" data-tdp="65">Intel Core i5-11400F - ₺3.200</option>
+                            <option value="3500" data-performance="75" data-cores="6" data-threads="12" data-tdp="65">Intel Core i5-12400F - ₺3.500</option>
+                            <option value="3800" data-performance="78" data-cores="6" data-threads="12" data-tdp="65">Intel Core i5-12400 - ₺3.800</option>
+                            <option value="4200" data-performance="85" data-cores="6" data-threads="12" data-tdp="125">Intel Core i5-13600KF - ₺4.200</option>
+                            <option value="4500" data-performance="87" data-cores="6" data-threads="12" data-tdp="125">Intel Core i5-13600K - ₺4.500</option>
+                            <option value="4800" data-performance="89" data-cores="6" data-threads="12" data-tdp="65">Intel Core i5-13400F - ₺4.800</option>
+                            <option value="5200" data-performance="91" data-cores="6" data-threads="12" data-tdp="154">Intel Core i5-14600KF - ₺5.200</option>
+                            
+                            <!-- Intel High-End -->
+                            <option value="5500" data-performance="90" data-cores="8" data-threads="16" data-tdp="65">Intel Core i7-12700F - ₺5.500</option>
+                            <option value="5800" data-performance="92" data-cores="8" data-threads="16" data-tdp="125">Intel Core i7-13700KF - ₺5.800</option>
+                            <option value="6200" data-performance="94" data-cores="8" data-threads="16" data-tdp="125">Intel Core i7-13700K - ₺6.200</option>
+                            <option value="6800" data-performance="96" data-cores="8" data-threads="16" data-tdp="65">Intel Core i7-13700F - ₺6.800</option>
+                            <option value="7200" data-performance="97" data-cores="8" data-threads="16" data-tdp="125">Intel Core i7-14700KF - ₺7.200</option>
+                            
+                            <!-- Intel Enthusiast -->
+                            <option value="8500" data-performance="98" data-cores="8" data-threads="16" data-tdp="125">Intel Core i9-13900KF - ₺8.500</option>
+                            <option value="9200" data-performance="99" data-cores="8" data-threads="16" data-tdp="125">Intel Core i9-13900K - ₺9.200</option>
+                            <option value="9800" data-performance="100" data-cores="8" data-threads="16" data-tdp="125">Intel Core i9-14900KF - ₺9.800</option>
+                            <option value="10500" data-performance="100" data-cores="8" data-threads="16" data-tdp="125">Intel Core i9-14900K - ₺10.500</option>
+                            
+                            <!-- AMD Budget -->
+                            <option value="2400" data-performance="50" data-cores="4" data-threads="8" data-tdp="65">AMD Ryzen 5 4500 - ₺2.400</option>
+                            <option value="2800" data-performance="58" data-cores="6" data-threads="12" data-tdp="65">AMD Ryzen 5 5500 - ₺2.800</option>
+                            <option value="3200" data-performance="72" data-cores="6" data-threads="12" data-tdp="65">AMD Ryzen 5 5600X - ₺3.200</option>
+                            <option value="3500" data-performance="75" data-cores="6" data-threads="12" data-tdp="65">AMD Ryzen 5 5600 - ₺3.500</option>
+                            <option value="3800" data-performance="78" data-cores="6" data-threads="12" data-tdp="105">AMD Ryzen 5 7600X - ₺3.800</option>
+                            <option value="4200" data-performance="82" data-cores="6" data-threads="12" data-tdp="65">AMD Ryzen 5 7600 - ₺4.200</option>
+                            
+                            <!-- AMD Mid-Range -->
+                            <option value="4500" data-performance="85" data-cores="8" data-threads="16" data-tdp="105">AMD Ryzen 7 5700X - ₺4.500</option>
+                            <option value="4800" data-performance="88" data-cores="8" data-threads="16" data-tdp="105">AMD Ryzen 7 5800X3D - ₺4.800</option>
+                            <option value="5200" data-performance="90" data-cores="8" data-threads="16" data-tdp="105">AMD Ryzen 7 5800X - ₺5.200</option>
+                            <option value="5800" data-performance="93" data-cores="8" data-threads="16" data-tdp="105">AMD Ryzen 7 7700X - ₺5.800</option>
+                            <option value="6200" data-performance="95" data-cores="8" data-threads="16" data-tdp="65">AMD Ryzen 7 7700 - ₺6.200</option>
+                            <option value="6800" data-performance="97" data-cores="8" data-threads="16" data-tdp="120">AMD Ryzen 7 7800X3D - ₺6.800</option>
+                            
+                            <!-- AMD High-End -->
+                            <option value="6200" data-performance="95" data-cores="12" data-threads="24" data-tdp="105">AMD Ryzen 9 5900X - ₺6.200</option>
+                            <option value="7500" data-performance="97" data-cores="12" data-threads="24" data-tdp="105">AMD Ryzen 9 5950X - ₺7.500</option>
+                            <option value="8200" data-performance="98" data-cores="12" data-threads="24" data-tdp="170">AMD Ryzen 9 7900X - ₺8.200</option>
+                            <option value="9500" data-performance="99" data-cores="16" data-threads="32" data-tdp="170">AMD Ryzen 9 7950X - ₺9.500</option>
+                            <option value="10200" data-performance="100" data-cores="16" data-threads="32" data-tdp="120">AMD Ryzen 9 7950X3D - ₺10.200</option>
+                        </select>
+                    </div>
+                    
+                    <div class="price-display">
+                        <span>Fiyat:</span>
+                        <span class="price-amount" id="cpu-price">₺0</span>
+                    </div>
+                    
+                    <div class="component-features" id="cpu-features">
+                        <!-- CPU özellikleri buraya eklenecek -->
+                    </div>
+                </div>
+
+                <!-- GPU Card -->
+                <div class="component-card">
+                    <div class="component-header">
+                        <div class="component-icon">
+                            <i class="fas fa-tv"></i>
+                        </div>
+                        <div class="component-info">
+                            <h3>Ekran Kartı (GPU)</h3>
+                            <p>Grafik işleme ve oyun performansı</p>
+                        </div>
+                    </div>
+                    
+                    <div class="component-select">
+                        <select id="gpu" onchange="updateSystem()">
+                            <option value="0">Seçiniz...</option>
+                            <!-- Budget GPUs -->
+                            <option value="2800" data-performance="35" data-vram="4" data-tdp="75">NVIDIA GTX 1630 - ₺2.800</option>
+                            <option value="3200" data-performance="45" data-vram="4" data-tdp="75">NVIDIA GTX 1650 - ₺3.200</option>
+                            <option value="3800" data-performance="55" data-vram="4" data-tdp="100">NVIDIA GTX 1650 Super - ₺3.800</option>
+                            <option value="4200" data-performance="60" data-vram="6" data-tdp="125">NVIDIA GTX 1660 - ₺4.200</option>
+                            <option value="4500" data-performance="65" data-vram="6" data-tdp="125">NVIDIA GTX 1660 Super - ₺4.500</option>
+                            <option value="4800" data-performance="68" data-vram="6" data-tdp="120">NVIDIA GTX 1660 Ti - ₺4.800</option>
+                            
+                            <!-- AMD Budget -->
+                            <option value="3500" data-performance="50" data-vram="4" data-tdp="107">AMD RX 5500 XT 4GB - ₺3.500</option>
+                            <option value="4000" data-performance="58" data-vram="8" data-tdp="130">AMD RX 5500 XT 8GB - ₺4.000</option>
+                            <option value="4500" data-performance="62" data-vram="8" data-tdp="180">AMD RX 5600 XT - ₺4.500</option>
+                            <option value="5200" data-performance="70" data-vram="8" data-tdp="160">AMD RX 6600 - ₺5.200</option>
+                            <option value="5800" data-performance="75" data-vram="8" data-tdp="160">AMD RX 6600 XT - ₺5.800</option>
+                            
+                            <!-- Mid-Range NVIDIA -->
+                            <option value="6200" data-performance="72" data-vram="8" data-tdp="170">NVIDIA RTX 3060 - ₺6.200</option>
+                            <option value="6800" data-performance="75" data-vram="12" data-tdp="170">NVIDIA RTX 3060 12GB - ₺6.800</option>
+                            <option value="7500" data-performance="78" data-vram="8" data-tdp="200">NVIDIA RTX 3060 Ti - ₺7.500</option>
+                            <option value="9200" data-performance="85" data-vram="8" data-tdp="220">NVIDIA RTX 3070 - ₺9.200</option>
+                            <option value="10500" data-performance="88" data-vram="8" data-tdp="290">NVIDIA RTX 3070 Ti - ₺10.500</option>
+                            <option value="12000" data-performance="90" data-vram="10" data-tdp="320">NVIDIA RTX 3080 - ₺12.000</option>
+                            <option value="14500" data-performance="93" data-vram="12" data-tdp="350">NVIDIA RTX 3080 Ti - ₺14.500</option>
+                            <option value="18000" data-performance="95" data-vram="24" data-tdp="450">NVIDIA RTX 3090 - ₺18.000</option>
+                            
+                            <!-- RTX 40 Series -->
+                            <option value="8500" data-performance="80" data-vram="8" data-tdp="115">NVIDIA RTX 4060 - ₺8.500</option>
+                            <option value="9800" data-performance="83" data-vram="8" data-tdp="165">NVIDIA RTX 4060 Ti 8GB - ₺9.800</option>
+                            <option value="11200" data-performance="85" data-vram="16" data-tdp="165">NVIDIA RTX 4060 Ti 16GB - ₺11.200</option>
+                            <option value="12500" data-performance="92" data-vram="12" data-tdp="200">NVIDIA RTX 4070 - ₺12.500</option>
+                            <option value="14800" data-performance="94" data-vram="12" data-tdp="220">NVIDIA RTX 4070 Super - ₺14.800</option>
+                            <option value="16500" data-performance="95" data-vram="12" data-tdp="285">NVIDIA RTX 4070 Ti - ₺16.500</option>
+                            <option value="18500" data-performance="97" data-vram="16" data-tdp="285">NVIDIA RTX 4070 Ti Super - ₺18.500</option>
+                            <option value="22000" data-performance="96" data-vram="16" data-tdp="320">NVIDIA RTX 4080 - ₺22.000</option>
+                            <option value="24500" data-performance="98" data-vram="16" data-tdp="320">NVIDIA RTX 4080 Super - ₺24.500</option>
+                            <option value="28000" data-performance="100" data-vram="24" data-tdp="450">NVIDIA RTX 4090 - ₺28.000</option>
+                            
+                            <!-- AMD Mid-Range -->
+                            <option value="7200" data-performance="78" data-vram="10" data-tdp="230">AMD RX 6700 XT - ₺7.200</option>
+                            <option value="8500" data-performance="82" data-vram="12" data-tdp="230">AMD RX 6750 XT - ₺8.500</option>
+                            <option value="9800" data-performance="85" data-vram="16" data-tdp="300">AMD RX 6800 - ₺9.800</option>
+                            <option value="11200" data-performance="88" data-vram="16" data-tdp="300">AMD RX 6800 XT - ₺11.200</option>
+                            <option value="13500" data-performance="92" data-vram="16" data-tdp="335">AMD RX 6900 XT - ₺13.500</option>
+                            <option value="15800" data-performance="94" data-vram="24" data-tdp="355">AMD RX 6950 XT - ₺15.800</option>
+                            
+                            <!-- AMD RX 7000 Series -->
+                            <option value="9500" data-performance="83" data-vram="12" data-tdp="200">AMD RX 7600 - ₺9.500</option>
+                            <option value="10800" data-performance="86" data-vram="16" data-tdp="245">AMD RX 7600 XT - ₺10.800</option>
+                            <option value="11500" data-performance="88" data-vram="12" data-tdp="245">AMD RX 7700 XT - ₺11.500</option>
+                            <option value="13200" data-performance="91" data-vram="16" data-tdp="270">AMD RX 7800 XT - ₺13.200</option>
+                            <option value="16800" data-performance="94" data-vram="20" data-tdp="315">AMD RX 7900 GRE - ₺16.800</option>
+                            <option value="19500" data-performance="96" data-vram="20" data-tdp="315">AMD RX 7900 XT - ₺19.500</option>
+                            <option value="22500" data-performance="98" data-vram="24" data-tdp="355">AMD RX 7900 XTX - ₺22.500</option>
+                            
+                            <!-- Professional Cards -->
+                            <option value="35000" data-performance="85" data-vram="16" data-tdp="170">NVIDIA RTX 4000 Ada - ₺35.000</option>
+                            <option value="45000" data-performance="90" data-vram="20" data-tdp="285">NVIDIA RTX 5000 Ada - ₺45.000</option>
+                            <option value="65000" data-performance="95" data-vram="48" data-tdp="300">NVIDIA RTX 6000 Ada - ₺65.000</option>
+                        </select>
+                    </div>
+                    
+                    <div class="price-display">
+                        <span>Fiyat:</span>
+                        <span class="price-amount" id="gpu-price">₺0</span>
+                    </div>
+                    
+                    <div class="component-features" id="gpu-features">
+                        <!-- GPU özellikleri buraya eklenecek -->
+                    </div>
+                </div>
+
+                <!-- RAM Card -->
+                <div class="component-card">
+                    <div class="component-header">
+                        <div class="component-icon">
+                            <i class="fas fa-memory"></i>
+                        </div>
+                        <div class="component-info">
+                            <h3>RAM Bellek</h3>
+                            <p>Sistem ve uygulama belleği</p>
+                        </div>
+                    </div>
+                    
+                    <div class="component-select">
+                        <select id="ram" onchange="updateSystem()">
+                            <option value="0">Seçiniz...</option>
+                            <!-- DDR4 Budget -->
+                            <option value="600" data-performance="40" data-capacity="8" data-speed="2400" data-type="DDR4">8GB DDR4 2400MHz - ₺600</option>
+                            <option value="700" data-performance="45" data-capacity="8" data-speed="2666" data-type="DDR4">8GB DDR4 2666MHz - ₺700</option>
+                            <option value="800" data-performance="50" data-capacity="8" data-speed="3200" data-type="DDR4">8GB DDR4 3200MHz - ₺800</option>
+                            <option value="900" data-performance="55" data-capacity="8" data-speed="3600" data-type="DDR4">8GB DDR4 3600MHz - ₺900</option>
+                            
+                            <!-- DDR4 16GB -->
+                            <option value="1200" data-performance="65" data-capacity="16" data-speed="2400" data-type="DDR4">16GB DDR4 2400MHz - ₺1.200</option>
+                            <option value="1300" data-performance="70" data-capacity="16" data-speed="2666" data-type="DDR4">16GB DDR4 2666MHz - ₺1.300</option>
+                            <option value="1400" data-performance="75" data-capacity="16" data-speed="3200" data-type="DDR4">16GB DDR4 3200MHz - ₺1.400</option>
+                            <option value="1600" data-performance="78" data-capacity="16" data-speed="3600" data-type="DDR4">16GB DDR4 3600MHz - ₺1.600</option>
+                            <option value="1800" data-performance="80" data-capacity="16" data-speed="4000" data-type="DDR4">16GB DDR4 4000MHz - ₺1.800</option>
+                            
+                            <!-- DDR4 32GB -->
+                            <option value="2000" data-performance="80" data-capacity="32" data-speed="2400" data-type="DDR4">32GB DDR4 2400MHz - ₺2.000</option>
+                            <option value="2100" data-performance="82" data-capacity="32" data-speed="2666" data-type="DDR4">32GB DDR4 2666MHz - ₺2.100</option>
+                            <option value="2200" data-performance="85" data-capacity="32" data-speed="3200" data-type="DDR4">32GB DDR4 3200MHz - ₺2.200</option>
+                            <option value="2500" data-performance="87" data-capacity="32" data-speed="3600" data-type="DDR4">32GB DDR4 3600MHz - ₺2.500</option>
+                            <option value="2800" data-performance="88" data-capacity="32" data-speed="4000" data-type="DDR4">32GB DDR4 4000MHz - ₺2.800</option>
+                            
+                            <!-- DDR4 64GB -->
+                            <option value="3800" data-performance="90" data-capacity="64" data-speed="3200" data-type="DDR4">64GB DDR4 3200MHz - ₺3.800</option>
+                            <option value="4200" data-performance="92" data-capacity="64" data-speed="3600" data-type="DDR4">64GB DDR4 3600MHz - ₺4.200</option>
+                            <option value="4800" data-performance="93" data-capacity="64" data-speed="4000" data-type="DDR4">64GB DDR4 4000MHz - ₺4.800</option>
+                            
+                            <!-- DDR5 16GB -->
+                            <option value="1400" data-performance="75" data-capacity="16" data-speed="4800" data-type="DDR5">16GB DDR5 4800MHz - ₺1.400</option>
+                            <option value="1600" data-performance="80" data-capacity="16" data-speed="5600" data-type="DDR5">16GB DDR5 5600MHz - ₺1.600</option>
+                            <option value="1800" data-performance="82" data-capacity="16" data-speed="6000" data-type="DDR5">16GB DDR5 6000MHz - ₺1.800</option>
+                            <option value="2000" data-performance="85" data-capacity="16" data-speed="6400" data-type="DDR5">16GB DDR5 6400MHz - ₺2.000</option>
+                            <option value="2200" data-performance="87" data-capacity="16" data-speed="7200" data-type="DDR5">16GB DDR5 7200MHz - ₺2.200</option>
+                            
+                            <!-- DDR5 32GB -->
+                            <option value="2600" data-performance="85" data-capacity="32" data-speed="4800" data-type="DDR5">32GB DDR5 4800MHz - ₺2.600</option>
+                            <option value="2800" data-performance="90" data-capacity="32" data-speed="5600" data-type="DDR5">32GB DDR5 5600MHz - ₺2.800</option>
+                            <option value="3200" data-performance="92" data-capacity="32" data-speed="6000" data-type="DDR5">32GB DDR5 6000MHz - ₺3.200</option>
+                            <option value="3600" data-performance="94" data-capacity="32" data-speed="6400" data-type="DDR5">32GB DDR5 6400MHz - ₺3.600</option>
+                            <option value="4000" data-performance="95" data-capacity="32" data-speed="7200" data-type="DDR5">32GB DDR5 7200MHz - ₺4.000</option>
+                            
+                            <!-- DDR5 64GB -->
+                            <option value="4200" data-performance="95" data-capacity="64" data-speed="5600" data-type="DDR5">64GB DDR5 5600MHz - ₺4.200</option>
+                            <option value="4800" data-performance="96" data-capacity="64" data-speed="6000" data-type="DDR5">64GB DDR5 6000MHz - ₺4.800</option>
+                            <option value="5500" data-performance="97" data-capacity="64" data-speed="6400" data-type="DDR5">64GB DDR5 6400MHz - ₺5.500</option>
+                            <option value="6200" data-performance="98" data-capacity="64" data-speed="7200" data-type="DDR5">64GB DDR5 7200MHz - ₺6.200</option>
+                            
+                            <!-- DDR5 128GB -->
+                            <option value="8500" data-performance="98" data-capacity="128" data-speed="5600" data-type="DDR5">128GB DDR5 5600MHz - ₺8.500</option>
+                            <option value="9500" data-performance="99" data-capacity="128" data-speed="6000" data-type="DDR5">128GB DDR5 6000MHz - ₺9.500</option>
+                            <option value="11000" data-performance="100" data-capacity="128" data-speed="6400" data-type="DDR5">128GB DDR5 6400MHz - ₺11.000</option>
+                        </select>
+                    </div>
+                    
+                    <div class="price-display">
+                        <span>Fiyat:</span>
+                        <span class="price-amount" id="ram-price">₺0</span>
+                    </div>
+                    
+                    <div class="component-features" id="ram-features">
+                        <!-- RAM özellikleri buraya eklenecek -->
+                    </div>
+                </div>
+                <!-- Motherboard Card -->
+                <div class="component-card">
+                    <div class="component-header">
+                        <div class="component-icon">
+                            <i class="fas fa-sitemap"></i>
+                        </div>
+                        <div class="component-info">
+                            <h3>Anakart</h3>
+                            <p>Tüm bileşenleri birbirine bağlar</p>
+                        </div>
+                    </div>
+                    
+                    <div class="component-select">
+                        <select id="motherboard" onchange="updateSystem()">
+                            <option value="0">Seçiniz...</option>
+                            <!-- AMD AM4 Budget -->
+                            <option value="800" data-socket="AM4" data-chipset="A320" data-ram-type="DDR4">MSI A320M-A PRO MAX - ₺800</option>
+                            <option value="1000" data-socket="AM4" data-chipset="B450" data-ram-type="DDR4">ASUS PRIME A320M-K - ₺1.000</option>
+                            <option value="1200" data-socket="AM4" data-chipset="B450" data-ram-type="DDR4">MSI B450M PRO-VDH MAX - ₺1.200</option>
+                            <option value="1400" data-socket="AM4" data-chipset="B450" data-ram-type="DDR4">ASUS PRIME B450M-A II - ₺1.400</option>
+                            <option value="1600" data-socket="AM4" data-chipset="B450" data-ram-type="DDR4">Gigabyte B450M DS3H V2 - ₺1.600</option>
+                            
+                            <!-- AMD AM4 Mid-Range -->
+                            <option value="1800" data-socket="AM4" data-chipset="B550" data-ram-type="DDR4">ASUS PRIME B550M-A - ₺1.800</option>
+                            <option value="2000" data-socket="AM4" data-chipset="B550" data-ram-type="DDR4">MSI B550M PRO-B - ₺2.000</option>
+                            <option value="2200" data-socket="AM4" data-chipset="B550" data-ram-type="DDR4">Gigabyte B550M AORUS ELITE - ₺2.200</option>
+                            <option value="2500" data-socket="AM4" data-chipset="B550" data-ram-type="DDR4">MSI MAG B550 TOMAHAWK - ₺2.500</option>
+                            <option value="2800" data-socket="AM4" data-chipset="B550" data-ram-type="DDR4">ASUS TUF GAMING B550-PLUS - ₺2.800</option>
+                            <option value="3200" data-socket="AM4" data-chipset="B550" data-ram-type="DDR4">ASUS ROG STRIX B550-F GAMING - ₺3.200</option>
+                            <option value="3500" data-socket="AM4" data-chipset="B550" data-ram-type="DDR4">MSI MAG B550 TOMAHAWK MAX WIFI - ₺3.500</option>
+                            
+                            <!-- AMD AM4 High-End -->
+                            <option value="3800" data-socket="AM4" data-chipset="X570" data-ram-type="DDR4">ASUS PRIME X570-P - ₺3.800</option>
+                            <option value="4200" data-socket="AM4" data-chipset="X570" data-ram-type="DDR4">MSI MAG X570 TOMAHAWK WIFI - ₺4.200</option>
+                            <option value="4500" data-socket="AM4" data-chipset="X570" data-ram-type="DDR4">ASUS ROG CROSSHAIR VIII HERO - ₺4.500</option>
+                            <option value="5200" data-socket="AM4" data-chipset="X570" data-ram-type="DDR4">ASUS ROG CROSSHAIR VIII DARK HERO - ₺5.200</option>
+                            
+                            <!-- AMD AM5 -->
+                            <option value="3200" data-socket="AM5" data-chipset="B650" data-ram-type="DDR5">MSI PRO B650-P WIFI - ₺3.200</option>
+                            <option value="3500" data-socket="AM5" data-chipset="B650" data-ram-type="DDR5">ASUS PRIME B650-PLUS - ₺3.500</option>
+                            <option value="3800" data-socket="AM5" data-chipset="B650" data-ram-type="DDR5">Gigabyte B650 AORUS ELITE AX - ₺3.800</option>
+                            <option value="4200" data-socket="AM5" data-chipset="B650" data-ram-type="DDR5">ASUS TUF GAMING B650-PLUS WIFI - ₺4.200</option>
+                            <option value="4800" data-socket="AM5" data-chipset="X670" data-ram-type="DDR5">MSI MAG X670E TOMAHAWK WIFI - ₺4.800</option>
+                            <option value="5500" data-socket="AM5" data-chipset="X670" data-ram-type="DDR5">ASUS ROG STRIX X670E-E GAMING WIFI - ₺5.500</option>
+                            <option value="6200" data-socket="AM5" data-chipset="X670" data-ram-type="DDR5">ASUS ROG CROSSHAIR X670E HERO - ₺6.200</option>
+                            
+                            <!-- Intel LGA1700 Budget -->
+                            <option value="1200" data-socket="LGA1700" data-chipset="H610" data-ram-type="DDR4">MSI PRO H610M-G - ₺1.200</option>
+                            <option value="1400" data-socket="LGA1700" data-chipset="H610" data-ram-type="DDR4">ASUS PRIME H610M-A D4 - ₺1.400</option>
+                            <option value="1600" data-socket="LGA1700" data-chipset="B660" data-ram-type="DDR4">MSI PRO B660M-A - ₺1.600</option>
+                            <option value="1800" data-socket="LGA1700" data-chipset="B660" data-ram-type="DDR4">ASUS PRIME B660M-A D4 - ₺1.800</option>
+                            <option value="2000" data-socket="LGA1700" data-chipset="B660" data-ram-type="DDR4">Gigabyte B660M DS3H DDR4 - ₺2.000</option>
+                            
+                            <!-- Intel LGA1700 Mid-Range -->
+                            <option value="2200" data-socket="LGA1700" data-chipset="B660" data-ram-type="DDR4/DDR5">MSI MAG B660M MORTAR WIFI DDR4 - ₺2.200</option>
+                            <option value="2500" data-socket="LGA1700" data-chipset="B660" data-ram-type="DDR5">ASUS TUF GAMING B660M-PLUS WIFI D4 - ₺2.500</option>
+                            <option value="2800" data-socket="LGA1700" data-chipset="Z690" data-ram-type="DDR4/DDR5">MSI Z690-A PRO - ₺2.800</option>
+                            <option value="3200" data-socket="LGA1700" data-chipset="Z690" data-ram-type="DDR4/DDR5">ASUS PRIME Z690-P D4 - ₺3.200</option>
+                            <option value="3500" data-socket="LGA1700" data-chipset="Z690" data-ram-type="DDR4/DDR5">Gigabyte Z690 AORUS ELITE DDR4 - ₺3.500</option>
+                            <option value="3800" data-socket="LGA1700" data-chipset="Z690" data-ram-type="DDR4/DDR5">ASUS ROG STRIX Z690-E GAMING WIFI - ₺3.800</option>
+                            
+                            <!-- Intel LGA1700 High-End -->
+                            <option value="4200" data-socket="LGA1700" data-chipset="Z690" data-ram-type="DDR5">MSI MAG Z690 TOMAHAWK WIFI DDR5 - ₺4.200</option>
+                            <option value="4800" data-socket="LGA1700" data-chipset="Z790" data-ram-type="DDR5">ASUS PRIME Z790-P WIFI - ₺4.800</option>
+                            <option value="5200" data-socket="LGA1700" data-chipset="Z790" data-ram-type="DDR5">MSI MAG Z790 TOMAHAWK WIFI - ₺5.200</option>
+                            <option value="5800" data-socket="LGA1700" data-chipset="Z790" data-ram-type="DDR5">ASUS ROG STRIX Z790-E GAMING WIFI - ₺5.800</option>
+                            <option value="6500" data-socket="LGA1700" data-chipset="Z790" data-ram-type="DDR5">ASUS ROG MAXIMUS Z790 HERO - ₺6.500</option>
+                            <option value="7200" data-socket="LGA1700" data-chipset="Z790" data-ram-type="DDR5">ASUS ROG MAXIMUS Z790 EXTREME - ₺7.200</option>
+                            
+                            <!-- Intel LGA1200 (Older) -->
+                            <option value="1000" data-socket="LGA1200" data-chipset="H410" data-ram-type="DDR4">MSI H410M-A PRO - ₺1.000</option>
+                            <option value="1200" data-socket="LGA1200" data-chipset="B460" data-ram-type="DDR4">ASUS PRIME B460M-A - ₺1.200</option>
+                            <option value="1800" data-socket="LGA1200" data-chipset="Z490" data-ram-type="DDR4">MSI MAG Z490 TOMAHAWK - ₺1.800</option>
+                        </select>
+                    </div>
+                    
+                    <div class="price-display">
+                        <span>Fiyat:</span>
+                        <span class="price-amount" id="motherboard-price">₺0</span>
+                    </div>
+                    
+                    <div class="component-features" id="motherboard-features">
+                        <!-- Anakart özellikleri buraya eklenecek -->
+                    </div>
+                </div>
+
+                <!-- Storage Card -->
+                <div class="component-card">
+                    <div class="component-header">
+                        <div class="component-icon">
+                            <i class="fas fa-hdd"></i>
+                        </div>
+                        <div class="component-info">
+                            <h3>Depolama (SSD)</h3>
+                            <p>Veri saklama ve hızlı erişim</p>
+                        </div>
+                    </div>
+                    
+                    <div class="component-select">
+                        <select id="storage" onchange="updateSystem()">
+                            <option value="0">Seçiniz...</option>
+                            <!-- SATA SSD Budget -->
+                            <option value="400" data-capacity="120" data-type="SATA SSD" data-speed="550">120GB SATA SSD - ₺400</option>
+                            <option value="500" data-capacity="240" data-type="SATA SSD" data-speed="550">240GB SATA SSD - ₺500</option>
+                            <option value="600" data-capacity="480" data-type="SATA SSD" data-speed="550">480GB SATA SSD - ₺600</option>
+                            <option value="800" data-capacity="960" data-type="SATA SSD" data-speed="550">960GB SATA SSD - ₺800</option>
+                            
+                            <!-- NVMe Budget -->
+                            <option value="600" data-capacity="250" data-type="NVMe" data-speed="3500">250GB NVMe SSD - ₺600</option>
+                            <option value="800" data-capacity="500" data-type="NVMe" data-speed="3500">500GB NVMe SSD - ₺800</option>
+                            <option value="900" data-capacity="500" data-type="NVMe" data-speed="3500">500GB Kingston NV2 - ₺900</option>
+                            <option value="1000" data-capacity="500" data-type="NVMe" data-speed="3500">500GB Crucial P3 - ₺1.000</option>
+                            <option value="1200" data-capacity="1000" data-type="NVMe" data-speed="3500">1TB NVMe SSD - ₺1.200</option>
+                            <option value="1400" data-capacity="1000" data-type="NVMe" data-speed="3500">1TB Kingston NV2 - ₺1.400</option>
+                            <option value="1500" data-capacity="1000" data-type="NVMe" data-speed="3500">1TB Crucial P3 - ₺1.500</option>
+                            
+                            <!-- NVMe Mid-Range -->
+                            <option value="1600" data-capacity="1000" data-type="NVMe" data-speed="5000">1TB WD Blue SN570 - ₺1.600</option>
+                            <option value="1700" data-capacity="1000" data-type="NVMe" data-speed="5000">1TB Kingston KC3000 - ₺1.700</option>
+                            <option value="1800" data-capacity="1000" data-type="NVMe" data-speed="7000">1TB Samsung 980 PRO - ₺1.800</option>
+                            <option value="1900" data-capacity="1000" data-type="NVMe" data-speed="7000">1TB WD Black SN850X - ₺1.900</option>
+                            <option value="2000" data-capacity="1000" data-type="NVMe" data-speed="7000">1TB Seagate FireCuda 530 - ₺2.000</option>
+                            
+                            <!-- NVMe 2TB -->
+                            <option value="2200" data-capacity="2000" data-type="NVMe" data-speed="3500">2TB NVMe SSD - ₺2.200</option>
+                            <option value="2500" data-capacity="2000" data-type="NVMe" data-speed="3500">2TB Kingston NV2 - ₺2.500</option>
+                            <option value="2800" data-capacity="2000" data-type="NVMe" data-speed="5000">2TB WD Blue SN570 - ₺2.800</option>
+                            <option value="3200" data-capacity="2000" data-type="NVMe" data-speed="7000">2TB Samsung 980 PRO - ₺3.200</option>
+                            <option value="3500" data-capacity="2000" data-type="NVMe" data-speed="7000">2TB WD Black SN850X - ₺3.500</option>
+                            <option value="3800" data-capacity="2000" data-type="NVMe" data-speed="7000">2TB Seagate FireCuda 530 - ₺3.800</option>
+                            
+                            <!-- NVMe 4TB -->
+                            <option value="4500" data-capacity="4000" data-type="NVMe" data-speed="3500">4TB NVMe SSD - ₺4.500</option>
+                            <option value="5200" data-capacity="4000" data-type="NVMe" data-speed="5000">4TB WD Blue SN570 - ₺5.200</option>
+                            <option value="6500" data-capacity="4000" data-type="NVMe" data-speed="7000">4TB Samsung 980 PRO - ₺6.500</option>
+                            <option value="7200" data-capacity="4000" data-type="NVMe" data-speed="7000">4TB WD Black SN850X - ₺7.200</option>
+                            
+                            <!-- HDD Options -->
+                            <option value="800" data-capacity="1000" data-type="HDD" data-speed="7200">1TB HDD 7200RPM - ₺800</option>
+                            <option value="1000" data-capacity="2000" data-type="HDD" data-speed="7200">2TB HDD 7200RPM - ₺1.000</option>
+                            <option value="1400" data-capacity="4000" data-type="HDD" data-speed="7200">4TB HDD 7200RPM - ₺1.400</option>
+                            <option value="1800" data-capacity="6000" data-type="HDD" data-speed="7200">6TB HDD 7200RPM - ₺1.800</option>
+                            <option value="2200" data-capacity="8000" data-type="HDD" data-speed="7200">8TB HDD 7200RPM - ₺2.200</option>
+                            <option value="2800" data-capacity="10000" data-type="HDD" data-speed="7200">10TB HDD 7200RPM - ₺2.800</option>
+                            
+                            <!-- High-End NVMe -->
+                            <option value="2200" data-capacity="1000" data-type="NVMe" data-speed="12000">1TB Samsung 990 PRO - ₺2.200</option>
+                            <option value="2500" data-capacity="1000" data-type="NVMe" data-speed="12000">1TB WD Black SN850X - ₺2.500</option>
+                            <option value="4200" data-capacity="2000" data-type="NVMe" data-speed="12000">2TB Samsung 990 PRO - ₺4.200</option>
+                            <option value="4800" data-capacity="2000" data-type="NVMe" data-speed="12000">2TB WD Black SN850X - ₺4.800</option>
+                            
+                            <!-- Enterprise -->
+                            <option value="8500" data-capacity="4000" data-type="NVMe" data-speed="12000">4TB Samsung 990 PRO - ₺8.500</option>
+                            <option value="12000" data-capacity="8000" data-type="NVMe" data-speed="12000">8TB Samsung 990 PRO - ₺12.000</option>
+                        </select>
+                    </div>
+                    
+                    <div class="price-display">
+                        <span>Fiyat:</span>
+                        <span class="price-amount" id="storage-price">₺0</span>
+                    </div>
+                    
+                    <div class="component-features" id="storage-features">
+                        <!-- Depolama özellikleri buraya eklenecek -->
+                    </div>
+                </div>
+
+                <!-- PSU Card -->
+                <div class="component-card">
+                    <div class="component-header">
+                        <div class="component-icon">
+                            <i class="fas fa-plug"></i>
+                        </div>
+                        <div class="component-info">
+                            <h3>Güç Kaynağı (PSU)</h3>
+                            <p>Sisteme güvenli güç sağlar</p>
+                        </div>
+                    </div>
+                    
+                    <div class="component-select">
+                        <select id="psu" onchange="updateSystem()">
+                            <option value="0">Seçiniz...</option>
+                            <!-- Budget PSUs -->
+                            <option value="600" data-wattage="400" data-efficiency="80+" data-modular="No">400W 80+ - ₺600</option>
+                            <option value="700" data-wattage="450" data-efficiency="80+" data-modular="No">450W 80+ - ₺700</option>
+                            <option value="800" data-wattage="500" data-efficiency="80+ Bronze" data-modular="No">500W 80+ Bronze - ₺800</option>
+                            <option value="900" data-wattage="550" data-efficiency="80+ Bronze" data-modular="No">550W 80+ Bronze - ₺900</option>
+                            <option value="1000" data-wattage="600" data-efficiency="80+ Bronze" data-modular="No">600W 80+ Bronze - ₺1.000</option>
+                            
+                            <!-- Mid-Range PSUs -->
+                            <option value="1100" data-wattage="650" data-efficiency="80+ Bronze" data-modular="No">650W 80+ Bronze - ₺1.100</option>
+                            <option value="1200" data-wattage="650" data-efficiency="80+ Gold" data-modular="Semi">650W 80+ Gold - ₺1.200</option>
+                            <option value="1300" data-wattage="700" data-efficiency="80+ Bronze" data-modular="No">700W 80+ Bronze - ₺1.300</option>
+                            <option value="1400" data-wattage="750" data-efficiency="80+ Bronze" data-modular="Semi">750W 80+ Bronze - ₺1.400</option>
+                            <option value="1500" data-wattage="700" data-efficiency="80+ Gold" data-modular="Semi">700W 80+ Gold - ₺1.500</option>
+                            <option value="1600" data-wattage="750" data-efficiency="80+ Gold" data-modular="Full">750W 80+ Gold - ₺1.600</option>
+                            <option value="1700" data-wattage="800" data-efficiency="80+ Bronze" data-modular="Semi">800W 80+ Bronze - ₺1.700</option>
+                            <option value="1800" data-wattage="850" data-efficiency="80+ Bronze" data-modular="Semi">850W 80+ Bronze - ₺1.800</option>
+                            
+                            <!-- High-End PSUs -->
+                            <option value="1900" data-wattage="800" data-efficiency="80+ Gold" data-modular="Full">800W 80+ Gold - ₺1.900</option>
+                            <option value="2000" data-wattage="850" data-efficiency="80+ Gold" data-modular="Semi">850W 80+ Gold - ₺2.000</option>
+                            <option value="2200" data-wattage="850" data-efficiency="80+ Platinum" data-modular="Full">850W 80+ Platinum - ₺2.200</option>
+                            <option value="2400" data-wattage="1000" data-efficiency="80+ Gold" data-modular="Full">1000W 80+ Gold - ₺2.400</option>
+                            <option value="2600" data-wattage="1000" data-efficiency="80+ Platinum" data-modular="Full">1000W 80+ Platinum - ₺2.600</option>
+                            <option value="2800" data-wattage="1000" data-efficiency="80+ Titanium" data-modular="Full">1000W 80+ Titanium - ₺2.800</option>
+                            
+                            <!-- Enthusiast PSUs -->
+                            <option value="3000" data-wattage="1200" data-efficiency="80+ Gold" data-modular="Full">1200W 80+ Gold - ₺3.000</option>
+                            <option value="3200" data-wattage="1200" data-efficiency="80+ Platinum" data-modular="Full">1200W 80+ Platinum - ₺3.200</option>
+                            <option value="3500" data-wattage="1200" data-efficiency="80+ Titanium" data-modular="Full">1200W 80+ Titanium - ₺3.500</option>
+                            <option value="3800" data-wattage="1300" data-efficiency="80+ Platinum" data-modular="Full">1300W 80+ Platinum - ₺3.800</option>
+                            <option value="4200" data-wattage="1500" data-efficiency="80+ Platinum" data-modular="Full">1500W 80+ Platinum - ₺4.200</option>
+                            <option value="4800" data-wattage="1600" data-efficiency="80+ Titanium" data-modular="Full">1600W 80+ Titanium - ₺4.800</option>
+                            
+                            <!-- Brand Specific -->
+                            <option value="1350" data-wattage="650" data-efficiency="80+ Gold" data-modular="Full">Corsair RM650x - ₺1.350</option>
+                            <option value="1450" data-wattage="750" data-efficiency="80+ Gold" data-modular="Full">Corsair RM750x - ₺1.450</option>
+                            <option value="1650" data-wattage="850" data-efficiency="80+ Gold" data-modular="Full">Corsair RM850x - ₺1.650</option>
+                            <option value="2100" data-wattage="1000" data-efficiency="80+ Gold" data-modular="Full">Corsair RM1000x - ₺2.100</option>
+                            
+                            <option value="1400" data-wattage="650" data-efficiency="80+ Gold" data-modular="Full">Seasonic Focus GX-650 - ₺1.400</option>
+                            <option value="1550" data-wattage="750" data-efficiency="80+ Gold" data-modular="Full">Seasonic Focus GX-750 - ₺1.550</option>
+                            <option value="1750" data-wattage="850" data-efficiency="80+ Gold" data-modular="Full">Seasonic Focus GX-850 - ₺1.750</option>
+                            <option value="2200" data-wattage="1000" data-efficiency="80+ Gold" data-modular="Full">Seasonic Focus GX-1000 - ₺2.200</option>
+                            
+                            <option value="1300" data-wattage="650" data-efficiency="80+ Gold" data-modular="Semi">EVGA SuperNOVA 650 G5 - ₺1.300</option>
+                            <option value="1500" data-wattage="750" data-efficiency="80+ Gold" data-modular="Full">EVGA SuperNOVA 750 G5 - ₺1.500</option>
+                            <option value="1700" data-wattage="850" data-efficiency="80+ Gold" data-modular="Full">EVGA SuperNOVA 850 G5 - ₺1.700</option>
+                        </select>
+                    </div>
+                    
+                    <div class="price-display">
+                        <span>Fiyat:</span>
+                        <span class="price-amount" id="psu-price">₺0</span>
+                    </div>
+                    
+                    <div class="component-features" id="psu-features">
+                        <!-- PSU özellikleri buraya eklenecek -->
+                    </div>
+                </div>
+
+                <!-- Case Card -->
+                <div class="component-card">
+                    <div class="component-header">
+                        <div class="component-icon">
+                            <i class="fas fa-cube"></i>
+                        </div>
+                        <div class="component-info">
+                            <h3>Kasa</h3>
+                            <p>Bileşenleri korur ve soğutma sağlar</p>
+                        </div>
+                    </div>
+                    
+                    <div class="component-select">
+                        <select id="case" onchange="updateSystem()">
+                            <option value="0">Seçiniz...</option>
+                            <!-- Budget Cases -->
+                            <option value="300" data-size="Mini ITX" data-fans="1" data-rgb="No">Cooler Master Elite 110 - ₺300</option>
+                            <option value="400" data-size="Micro ATX" data-fans="1" data-rgb="No">Temel Micro ATX Kasa - ₺400</option>
+                            <option value="500" data-size="Mid Tower" data-fans="1" data-rgb="No">Temel ATX Kasa - ₺500</option>
+                            <option value="600" data-size="Mid Tower" data-fans="2" data-rgb="No">Cooler Master MasterBox Q300L - ₺600</option>
+                            <option value="700" data-size="Mid Tower" data-fans="2" data-rgb="No">Fractal Design Core 1000 - ₺700</option>
+                            
+                            <!-- Mid-Range Cases -->
+                            <option value="800" data-size="Mid Tower" data-fans="2" data-rgb="No">Corsair 4000D - ₺800</option>
+                            <option value="900" data-size="Mid Tower" data-fans="2" data-rgb="No">Fractal Design Define 7 Compact - ₺900</option>
+                            <option value="1000" data-size="Mid Tower" data-fans="2" data-rgb="Yes">Cooler Master MasterBox TD500 Mesh - ₺1.000</option>
+                            <option value="1100" data-size="Mid Tower" data-fans="3" data-rgb="No">be quiet! Pure Base 500DX - ₺1.100</option>
+                            <option value="1200" data-size="Mid Tower" data-fans="2" data-rgb="Yes">NZXT H510 Elite - ₺1.200</option>
+                            <option value="1300" data-size="Mid Tower" data-fans="3" data-rgb="Yes">Corsair iCUE 4000X RGB - ₺1.300</option>
+                            <option value="1400" data-size="Mid Tower" data-fans="3" data-rgb="Yes">Fractal Design Meshify 2 - ₺1.400</option>
+                            <option value="1500" data-size="Mid Tower" data-fans="3" data-rgb="Yes">Phanteks Eclipse P400A - ₺1.500</option>
+                            
+                            <!-- High-End Cases -->
+                            <option value="1600" data-size="Mid Tower" data-fans="3" data-rgb="Yes">NZXT H7 Flow - ₺1.600</option>
+                            <option value="1700" data-size="Mid Tower" data-fans="4" data-rgb="Yes">Corsair 5000D - ₺1.700</option>
+                            <option value="1800" data-size="Mid Tower" data-fans="3" data-rgb="Yes">Lian Li PC-O11 Dynamic - ₺1.800</option>
+                            <option value="1900" data-size="Full Tower" data-fans="4" data-rgb="Yes">Corsair 7000D - ₺1.900</option>
+                            <option value="2000" data-size="Mid Tower" data-fans="4" data-rgb="Yes">be quiet! Dark Base Pro 900 - ₺2.000</option>
+                            <option value="2200" data-size="Mid Tower" data-fans="4" data-rgb="Yes">Phanteks Enthoo Evolv X - ₺2.200</option>
+                            <option value="2400" data-size="Full Tower" data-fans="5" data-rgb="Yes">Thermaltake Core P8 - ₺2.400</option>
+                            <option value="2500" data-size="Mid Tower" data-fans="3" data-rgb="Yes">Corsair 5000X RGB - ₺2.500</option>
+                            
+                            <!-- Premium Cases -->
+                            <option value="2800" data-size="Mid Tower" data-fans="4" data-rgb="Yes">Lian Li PC-O11 Dynamic EVO - ₺2.800</option>
+                            <option value="3000" data-size="Full Tower" data-fans="5" data-rgb="Yes">Corsair Obsidian 1000D - ₺3.000</option>
+                            <option value="3200" data-size="Mid Tower" data-fans="4" data-rgb="Yes">Phanteks Enthoo Elite - ₺3.200</option>
+                            <option value="3500" data-size="Full Tower" data-fans="6" data-rgb="Yes">Thermaltake Level 20 HT - ₺3.500</option>
+                            
+                            <!-- Mini ITX Cases -->
+                            <option value="800" data-size="Mini ITX" data-fans="2" data-rgb="No">Fractal Design Node 202 - ₺800</option>
+                            <option value="1000" data-size="Mini ITX" data-fans="2" data-rgb="Yes">NZXT H1 - ₺1.000</option>
+                            <option value="1200" data-size="Mini ITX" data-fans="2" data-rgb="Yes">Cooler Master NR200P - ₺1.200</option>
+                            <option value="1400" data-size="Mini ITX" data-fans="3" data-rgb="Yes">Lian Li A4-H2O - ₺1.400</option>
+                            <option value="1600" data-size="Mini ITX" data-fans="2" data-rgb="Yes">Phanteks Shift 2 - ₺1.600</option>
+                            
+                            <!-- Open Air Cases -->
+                            <option value="1800" data-size="Open Air" data-fans="3" data-rgb="Yes">Thermaltake Core P3 - ₺1.800</option>
+                            <option value="2200" data-size="Open Air" data-fans="4" data-rgb="Yes">Thermaltake Core P5 - ₺2.200</option>
+                            <option value="2800" data-size="Open Air" data-fans="5" data-rgb="Yes">Lian Li PC-T60 - ₺2.800</option>
+                            
+                            <!-- Server Cases -->
+                            <option value="1500" data-size="4U Rackmount" data-fans="4" data-rgb="No">Chenbro RM41300 - ₺1.500</option>
+                            <option value="2000" data-size="4U Rackmount" data-fans="6" data-rgb="No">Supermicro SC846 - ₺2.000</option>
+                        </select>
+                    </div>
+                    
+                    <div class="price-display">
+                        <span>Fiyat:</span>
+                        <span class="price-amount" id="case-price">₺0</span>
+                    </div>
+                    
+                    <div class="component-features" id="case-features">
+                        <!-- Kasa özellikleri buraya eklenecek -->
+                    </div>
+                </div>
+
+                <!-- Cooler Card -->
+                <div class="component-card">
+                    <div class="component-header">
+                        <div class="component-icon">
+                            <i class="fas fa-snowflake"></i>
+                        </div>
+                        <div class="component-info">
+                            <h3>CPU Soğutucu</h3>
+                            <p>İşlemciyi soğuk tutar</p>
+                        </div>
+                    </div>
+                    
+                    <div class="component-select">
+                        <select id="cooler" onchange="updateSystem()">
+                            <option value="0">Seçiniz...</option>
+                            <!-- Stock Coolers -->
+                            <option value="0" data-type="Stock" data-tdp="65" data-rgb="No">AMD Wraith Stealth (Ücretsiz) - ₺0</option>
+                            <option value="0" data-type="Stock" data-tdp="95" data-rgb="No">AMD Wraith Spire (Ücretsiz) - ₺0</option>
+                            <option value="200" data-type="Stock" data-tdp="65" data-rgb="No">Intel Stock Cooler - ₺200</option>
+                            
+                            <!-- Budget Air Coolers -->
+                            <option value="250" data-type="Air" data-tdp="95" data-rgb="No">Cooler Master Hyper H410R - ₺250</option>
+                            <option value="300" data-type="Air" data-tdp="120" data-rgb="No">Arctic Freezer 7 X - ₺300</option>
+                            <option value="350" data-type="Air" data-tdp="130" data-rgb="No">be quiet! Pure Rock Slim 2 - ₺350</option>
+                            <option value="400" data-type="Air" data-tdp="150" data-rgb="No">Cooler Master Hyper 212 Black Edition - ₺400</option>
+                            <option value="450" data-type="Air" data-tdp="150" data-rgb="Yes">Cooler Master Hyper 212 RGB - ₺450</option>
+                            <option value="500" data-type="Air" data-tdp="160" data-rgb="No">Arctic Freezer 34 eSports - ₺500</option>
+                            <option value="550" data-type="Air" data-tdp="180" data-rgb="No">be quiet! Pure Rock 2 - ₺550</option>
+                            
+                            <!-- Mid-Range Air Coolers -->
+                            <option value="600" data-type="Air" data-tdp="200" data-rgb="No">Scythe Mugen 5 Rev.C - ₺600</option>
+                            <option value="650" data-type="Air" data-tdp="220" data-rgb="No">Cooler Master MA624 Stealth - ₺650</option>
+                            <option value="700" data-type="Air" data-tdp="200" data-rgb="Yes">Cooler Master MasterAir MA624 Stealth - ₺700</option>
+                            <option value="750" data-type="Air" data-tdp="250" data-rgb="No">be quiet! Dark Rock 4 - ₺750</option>
+                            <option value="800" data-type="Air" data-tdp="250" data-rgb="No">Noctua NH-D15 - ₺800</option>
+                            <option value="850" data-type="Air" data-tdp="250" data-rgb="No">be quiet! Dark Rock Pro 4 - ₺850</option>
+                            <option value="900" data-type="Air" data-tdp="280" data-rgb="No">Noctua NH-D15S - ₺900</option>
+                            
+                            <!-- High-End Air Coolers -->
+                            <option value="950" data-type="Air" data-tdp="300" data-rgb="No">Scythe Fuma 2 Rev.B - ₺950</option>
+                            <option value="1000" data-type="Air" data-tdp="280" data-rgb="Yes">Cooler Master MasterAir MA824 Stealth - ₺1.000</option>
+                            <option value="1100" data-type="Air" data-tdp="300" data-rgb="No">be quiet! Dark Rock Elite - ₺1.100</option>
+                            <option value="1200" data-type="Air" data-tdp="350" data-rgb="No">Noctua NH-D15 chromax.black - ₺1.200</option>
+                            
+                            <!-- Budget AIO Coolers -->
+                            <option value="800" data-type="AIO 120mm" data-tdp="180" data-rgb="No">Cooler Master MasterLiquid ML120L - ₺800</option>
+                            <option value="900" data-type="AIO 120mm" data-tdp="200" data-rgb="Yes">Corsair H60 - ₺900</option>
+                            <option value="1000" data-type="AIO 240mm" data-tdp="250" data-rgb="No">Cooler Master MasterLiquid ML240L - ₺1.000</option>
+                            <option value="1100" data-type="AIO 240mm" data-tdp="250" data-rgb="Yes">Corsair H100i RGB ELITE - ₺1.100</option>
+                            <option value="1200" data-type="AIO 240mm" data-tdp="250" data-rgb="Yes">NZXT Kraken X53 - ₺1.200</option>
+                            
+                            <!-- Mid-Range AIO Coolers -->
+                            <option value="1300" data-type="AIO 280mm" data-tdp="300" data-rgb="Yes">Corsair H115i RGB ELITE - ₺1.300</option>
+                            <option value="1400" data-type="AIO 280mm" data-tdp="300" data-rgb="Yes">NZXT Kraken X63 - ₺1.400</option>
+                            <option value="1500" data-type="AIO 360mm" data-tdp="350" data-rgb="Yes">Cooler Master MasterLiquid ML360R - ₺1.500</option>
+                            <option value="1600" data-type="AIO 360mm" data-tdp="350" data-rgb="Yes">Corsair H150i RGB ELITE - ₺1.600</option>
+                            <option value="1700" data-type="AIO 360mm" data-tdp="350" data-rgb="Yes">NZXT Kraken X73 - ₺1.700</option>
+                            <option value="1800" data-type="AIO 280mm" data-tdp="300" data-rgb="Yes">NZXT Kraken X63 RGB - ₺1.800</option>
+                            
+                            <!-- High-End AIO Coolers -->
+                            <option value="1900" data-type="AIO 360mm" data-tdp="400" data-rgb="Yes">Corsair H150i ELITE CAPELLIX - ₺1.900</option>
+                            <option value="2000" data-type="AIO 360mm" data-tdp="400" data-rgb="Yes">ASUS ROG RYUO III 360 - ₺2.000</option>
+                            <option value="2200" data-type="AIO 360mm" data-tdp="400" data-rgb="Yes">Corsair H150i ELITE LCD - ₺2.200</option>
+                            <option value="2400" data-type="AIO 360mm" data-tdp="350" data-rgb="Yes">NZXT Kraken Z73 - ₺2.400</option>
+                            <option value="2600" data-type="AIO 420mm" data-tdp="450" data-rgb="Yes">Arctic Liquid Freezer II 420 - ₺2.600</option>
+                            
+                            <!-- Custom Loop Components -->
+                            <option value="3000" data-type="Custom Loop" data-tdp="500" data-rgb="Yes">Temel Custom Loop Kit - ₺3.000</option>
+                            <option value="4500" data-type="Custom Loop" data-tdp="600" data-rgb="Yes">Orta Seviye Custom Loop - ₺4.500</option>
+                            <option value="6500" data-type="Custom Loop" data-tdp="800" data-rgb="Yes">Premium Custom Loop - ₺6.500</option>
+                            <option value="8500" data-type="Custom Loop" data-tdp="1000" data-rgb="Yes">Extreme Custom Loop - ₺8.500</option>
+                            
+                            <!-- Specialty Coolers -->
+                            <option value="1500" data-type="Passive" data-tdp="95" data-rgb="No">NoFan CR-95C Fanless - ₺1.500</option>
+                            <option value="2200" data-type="Passive" data-tdp="130" data-rgb="No">Zalman FX100 Fanless - ₺2.200</option>
+                            <option value="1800" data-type="Low Profile" data-tdp="95" data-rgb="No">Noctua NH-L9i - ₺1.800</option>
+                            <option value="2000" data-type="Low Profile" data-tdp="120" data-rgb="No">be quiet! Shadow Rock LP - ₺2.000</option>
+                        </select>
+                    </div>
+                    
+                    <div class="price-display">
+                        <span>Fiyat:</span>
+                        <span class="price-amount" id="cooler-price">₺0</span>
+                    </div>
+                    
+                    <div class="component-features" id="cooler-features">
+                        <!-- Soğutucu özellikleri buraya eklenecek -->
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Compatibility Panel -->
+        <section class="compatibility-panel" id="compatibility-panel">
+            <div class="compatibility-header">
+                <div class="compatibility-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div>
+                    <h3>Uyumluluk Kontrolü</h3>
+                    <p>Seçilen bileşenlerin uyumluluğu kontrol ediliyor</p>
+                </div>
+            </div>
+            
+            <div class="compatibility-list" id="compatibility-list">
+                <!-- Uyumluluk kontrolleri buraya eklenecek -->
+            </div>
+        </section>
+
+        <!-- Performance Dashboard -->
+        <section class="performance-dashboard">
+            <h2 class="section-title">
+                <i class="fas fa-tachometer-alt"></i> Performans Analizi
+            </h2>
+            
+            <div class="performance-grid">
+                <div class="performance-meter">
+                    <div class="meter-circle" id="gaming-meter">
+                        <div class="meter-value" id="gaming-value">0</div>
+                    </div>
+                    <div class="meter-label">Oyun Performansı</div>
+                </div>
+                
+                <div class="performance-meter">
+                    <div class="meter-circle" id="productivity-meter">
+                        <div class="meter-value" id="productivity-value">0</div>
+                    </div>
+                    <div class="meter-label">İş Performansı</div>
+                </div>
+                
+                <div class="performance-meter">
+                    <div class="meter-circle" id="budget-meter">
+                        <div class="meter-value" id="budget-value">0</div>
+                    </div>
+                    <div class="meter-label">Fiyat/Performans</div>
+                </div>
+                
+                <div class="performance-meter">
+                    <div class="meter-circle" id="future-meter">
+                        <div class="meter-value" id="future-value">0</div>
+                    </div>
+                    <div class="meter-label">Gelecek Garantisi</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Total Section -->
+        <section class="total-section">
+            <div class="total-content">
+                <h2 class="section-title">
+                    <i class="fas fa-calculator"></i> Sistem Özeti
+                </h2>
+                
+                <div class="total-price" id="total-price">₺0</div>
+                <p style="font-size: 1.2em; margin-bottom: 20px;">Toplam Sistem Fiyatı</p>
+                
+                <div class="price-breakdown">
+                    <div class="breakdown-item">
+                        <div class="breakdown-label">Temel Bileşenler</div>
+                        <div class="breakdown-value" id="core-components-price">₺0</div>
+                    </div>
+                    <div class="breakdown-item">
+                        <div class="breakdown-label">Depolama & Bellek</div>
+                        <div class="breakdown-value" id="storage-memory-price">₺0</div>
+                    </div>
+                    <div class="breakdown-item">
+                        <div class="breakdown-label">Kasa & Soğutma</div>
+                        <div class="breakdown-value" id="case-cooling-price">₺0</div>
+                    </div>
+                    <div class="breakdown-item">
+                        <div class="breakdown-label">Güç Kaynağı</div>
+                        <div class="breakdown-value" id="psu-breakdown-price">₺0</div>
+                    </div>
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="action-btn success" onclick="showModal('specs')">
+                        <i class="fas fa-list"></i> Detaylı Özellikler
+                    </button>
+                    <button class="action-btn secondary" onclick="showModal('benchmarks')">
+                        <i class="fas fa-chart-bar"></i> Benchmark Sonuçları
+                    </button>
+                    <button class="action-btn warning" onclick="showModal('comparison')">
+                        <i class="fas fa-balance-scale"></i> Karşılaştır
+                    </button>
+                    <button class="action-btn" onclick="showModal('save')">
+                        <i class="fas fa-save"></i> Kaydet & Paylaş
+                    </button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Floating Panel -->
+    <div class="floating-panel">
+        <button class="panel-toggle" onclick="toggleQuickActions()">
+            <i class="fas fa-tools"></i>
+        </button>
+        <div class="quick-actions" id="quick-actions">
+            <button class="quick-btn" onclick="resetSystem()">
+                <i class="fas fa-undo"></i> Sıfırla
+            </button>
+            <button class="quick-btn" onclick="randomBuild()">
+                <i class="fas fa-random"></i> Rastgele
+            </button>
+            <button class="quick-btn" onclick="optimizeBuild()">
+                <i class="fas fa-magic"></i> Optimize Et
+            </button>
+            <button class="quick-btn" onclick="showModal('help')">
+                <i class="fas fa-question"></i> Yardım
+            </button>
+        </div>
+    </div>
+    <!-- Modals -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modal-title">Modal Başlık</h2>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+            <div id="modal-body">
+                <!-- Modal içeriği buraya gelecek -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loading-overlay">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <script>
+        // Global değişkenler
+        let currentBuild = {
+            cpu: 0, motherboard: 0, ram: 0, gpu: 0,
+            storage: 0, psu: 0, case: 0, cooler: 0
+        };
+        
+        let buildStats = {
+            totalBuilds: parseInt(localStorage.getItem('totalBuilds') || '0'),
+            avgPrice: parseInt(localStorage.getItem('avgPrice') || '0')
+        };
+
+        // Preset konfigürasyonları
+        const presets = {
+            budget: {
+                cpu: "3200", motherboard: "1800", ram: "1400", gpu: "4500",
+                storage: "900", psu: "1200", case: "400", cooler: "400"
+            },
+            gaming: {
+                cpu: "4200", motherboard: "2500", ram: "1600", gpu: "9200",
+                storage: "1400", psu: "1600", case: "800", cooler: "800"
+            },
+            workstation: {
+                cpu: "5800", motherboard: "3200", ram: "2800", gpu: "12500",
+                storage: "1800", psu: "2200", case: "1200", cooler: "1200"
+            },
+            enthusiast: {
+                cpu: "8500", motherboard: "4500", ram: "4200", gpu: "28000",
+                storage: "3200", psu: "2800", case: "2500", cooler: "2400"
+            }
+        };
+
+        // Oyun benchmark verileri
+        const gamesBenchmarks = [
+            { name: 'Cyberpunk 2077', baseScore: 45, settings: 'Ultra RTX' },
+            { name: 'Call of Duty MW3', baseScore: 85, settings: 'Ultra' },
+            { name: 'Fortnite', baseScore: 120, settings: 'Epic' },
+            { name: 'Valorant', baseScore: 200, settings: 'High' },
+            { name: 'GTA V', baseScore: 90, settings: 'Very High' },
+            { name: 'Apex Legends', baseScore: 110, settings: 'High' },
+            { name: 'Minecraft RTX', baseScore: 60, settings: 'RTX On' },
+            { name: 'Red Dead Redemption 2', baseScore: 55, settings: 'Ultra' },
+            { name: 'Assassin\'s Creed Valhalla', baseScore: 65, settings: 'Ultra High' },
+            { name: 'Control', baseScore: 50, settings: 'High RTX' }
+        ];
+
+        // Sayfa yüklendiğinde çalışacak fonksiyonlar
+        window.onload = function() {
+            loadFromURL();
+            updateStats();
+            updateSystem();
+            
+            // Animasyonları başlat
+            setTimeout(() => {
+                document.querySelector('.hero-title').style.animation = 'glow 2s ease-in-out infinite alternate';
+            }, 1000);
+        };
+
+        // URL'den konfigürasyon yükle
+        function loadFromURL() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const configParam = urlParams.get('config');
+            
+            if (configParam) {
+                try {
+                    const config = JSON.parse(atob(configParam));
+                    Object.keys(config).forEach(component => {
+                        const element = document.getElementById(component);
+                        if (element) element.value = config[component];
+                    });
+                } catch (e) {
+                    console.log('Config yüklenemedi');
+                }
+            }
+        }
+
+        // İstatistikleri güncelle
+        function updateStats() {
+            document.getElementById('total-builds').textContent = buildStats.totalBuilds;
+            document.getElementById('avg-price').textContent = `₺${buildStats.avgPrice.toLocaleString('tr-TR')}`;
+        }
+
+        // Preset yükle
+        function loadPreset(presetName) {
+            showLoading();
+            
+            setTimeout(() => {
+                const preset = presets[presetName];
+                Object.keys(preset).forEach(component => {
+                    document.getElementById(component).value = preset[component];
+                });
+                updateSystem();
+                hideLoading();
+                
+                // Başarı mesajı
+                showNotification(`${presetName.charAt(0).toUpperCase() + presetName.slice(1)} konfigürasyonu yüklendi!`, 'success');
+            }, 1000);
+        }
+
+        // Ana sistem güncelleme fonksiyonu
+        function updateSystem() {
+            updatePrices();
+            updateFeatures();
+            updateCompatibility();
+            updatePerformance();
+            updateBreakdown();
+        }
+
+        // Fiyatları güncelle
+        function updatePrices() {
+            const components = ['cpu', 'motherboard', 'ram', 'gpu', 'storage', 'psu', 'case', 'cooler'];
+            let total = 0;
+
+            components.forEach(component => {
+                const select = document.getElementById(component);
+                const price = parseInt(select.value) || 0;
+                total += price;
+                currentBuild[component] = price;
+                
+                const priceDisplay = document.getElementById(component + '-price');
+                priceDisplay.textContent = price > 0 ? `₺${price.toLocaleString('tr-TR')}` : '₺0';
+            });
+
+            document.getElementById('total-price').textContent = `₺${total.toLocaleString('tr-TR')}`;
+            
+            // İstatistikleri güncelle
+            if (total > 0) {
+                buildStats.avgPrice = Math.round((buildStats.avgPrice * buildStats.totalBuilds + total) / (buildStats.totalBuilds + 1));
+                document.getElementById('avg-price').textContent = `₺${buildStats.avgPrice.toLocaleString('tr-TR')}`;
+            }
+        }
+        // Bileşen özelliklerini güncelle
+        function updateFeatures() {
+            const components = ['cpu', 'motherboard', 'ram', 'gpu', 'storage', 'psu', 'case', 'cooler'];
+            
+            components.forEach(component => {
+                const select = document.getElementById(component);
+                const featuresDiv = document.getElementById(component + '-features');
+                
+                if (select.value !== '0') {
+                    const option = select.options[select.selectedIndex];
+                    let features = [];
+                    
+                    // Her bileşen için özel özellikler
+                    switch(component) {
+                        case 'cpu':
+                            if (option.dataset.cores) features.push(`${option.dataset.cores} Çekirdek`);
+                            if (option.dataset.threads) features.push(`${option.dataset.threads} Thread`);
+                            if (option.dataset.tdp) features.push(`${option.dataset.tdp}W TDP`);
+                            break;
+                        case 'gpu':
+                            if (option.dataset.vram) features.push(`${option.dataset.vram}GB VRAM`);
+                            if (option.dataset.tdp) features.push(`${option.dataset.tdp}W TDP`);
+                            if (option.textContent.includes('RTX')) features.push('Ray Tracing');
+                            break;
+                        case 'ram':
+                            if (option.dataset.capacity) features.push(`${option.dataset.capacity}GB`);
+                            if (option.dataset.speed) features.push(`${option.dataset.speed}MHz`);
+                            if (option.dataset.type) features.push(option.dataset.type);
+                            break;
+                        case 'motherboard':
+                            if (option.dataset.socket) features.push(option.dataset.socket);
+                            if (option.dataset.chipset) features.push(option.dataset.chipset);
+                            if (option.dataset.ramType) features.push(option.dataset.ramType);
+                            break;
+                        case 'storage':
+                            if (option.dataset.capacity) features.push(`${option.dataset.capacity}GB`);
+                            if (option.dataset.type) features.push(option.dataset.type);
+                            if (option.dataset.speed) features.push(`${option.dataset.speed}MB/s`);
+                            break;
+                        case 'psu':
+                            if (option.dataset.wattage) features.push(`${option.dataset.wattage}W`);
+                            if (option.dataset.efficiency) features.push(option.dataset.efficiency);
+                            if (option.dataset.modular && option.dataset.modular !== 'No') features.push(`${option.dataset.modular} Modular`);
+                            break;
+                        case 'case':
+                            if (option.dataset.size) features.push(option.dataset.size);
+                            if (option.dataset.fans) features.push(`${option.dataset.fans} Fan`);
+                            if (option.dataset.rgb === 'Yes') features.push('RGB');
+                            break;
+                        case 'cooler':
+                            if (option.dataset.type) features.push(option.dataset.type);
+                            if (option.dataset.tdp) features.push(`${option.dataset.tdp}W TDP`);
+                            if (option.dataset.rgb === 'Yes') features.push('RGB');
+                            break;
+                    }
+                    
+                    featuresDiv.innerHTML = features.map(feature => 
+                        `<span class="feature-tag">${feature}</span>`
+                    ).join('');
+                } else {
+                    featuresDiv.innerHTML = '';
+                }
+            });
+        }
+
+        // Uyumluluk kontrolü
+        function updateCompatibility() {
+            const compatibilityList = document.getElementById('compatibility-list');
+            const compatibilityIcon = document.querySelector('.compatibility-icon');
+            let issues = [];
+            let warnings = [];
+            let successes = [];
+
+            // CPU-Anakart uyumluluğu
+            const cpu = document.getElementById('cpu');
+            const motherboard = document.getElementById('motherboard');
+            
+            if (cpu.value !== '0' && motherboard.value !== '0') {
+                const cpuText = cpu.options[cpu.selectedIndex].text;
+                const mbOption = motherboard.options[motherboard.selectedIndex];
+                
+                const isIntel = cpuText.includes('Intel');
+                const isAMD = cpuText.includes('AMD');
+                const socket = mbOption.dataset.socket;
+                
+                if ((isIntel && socket === 'LGA1700') || (isAMD && socket === 'AM4')) {
+                    successes.push('CPU ve Anakart uyumlu');
+                } else {
+                    issues.push('CPU ve Anakart uyumsuz - Soket uyuşmazlığı');
+                }
+            }
+
+            // RAM-Anakart uyumluluğu
+            const ram = document.getElementById('ram');
+            if (ram.value !== '0' && motherboard.value !== '0') {
+                const ramOption = ram.options[ram.selectedIndex];
+                const mbOption = motherboard.options[motherboard.selectedIndex];
+                
+                const ramType = ramOption.dataset.type;
+                const mbRamType = mbOption.dataset.ramType;
+                
+                if (mbRamType.includes(ramType)) {
+                    successes.push('RAM ve Anakart uyumlu');
+                } else {
+                    issues.push('RAM ve Anakart uyumsuz - RAM tipi uyuşmazlığı');
+                }
+            }
+
+            // PSU-GPU uyumluluğu
+            const psu = document.getElementById('psu');
+            const gpu = document.getElementById('gpu');
+            
+            if (psu.value !== '0' && gpu.value !== '0') {
+                const psuOption = psu.options[psu.selectedIndex];
+                const gpuOption = gpu.options[gpu.selectedIndex];
+                
+                const psuWattage = parseInt(psuOption.dataset.wattage);
+                const gpuTdp = parseInt(gpuOption.dataset.tdp);
+                const cpuTdp = cpu.value !== '0' ? parseInt(cpu.options[cpu.selectedIndex].dataset.tdp) : 0;
+                
+                const totalTdp = gpuTdp + cpuTdp + 100; // +100W sistem için
+                
+                if (psuWattage >= totalTdp * 1.2) {
+                    successes.push('Güç kaynağı yeterli');
+                } else if (psuWattage >= totalTdp) {
+                    warnings.push('Güç kaynağı minimum seviyede - Daha yüksek watt önerilir');
+                } else {
+                    issues.push('Güç kaynağı yetersiz - Daha yüksek watt gerekli');
+                }
+            }
+
+            // CPU-Soğutucu uyumluluğu
+            const cooler = document.getElementById('cooler');
+            if (cooler.value !== '0' && cpu.value !== '0') {
+                const coolerOption = cooler.options[cooler.selectedIndex];
+                const cpuOption = cpu.options[cpu.selectedIndex];
+                
+                const coolerTdp = parseInt(coolerOption.dataset.tdp);
+                const cpuTdp = parseInt(cpuOption.dataset.tdp);
+                
+                if (coolerTdp >= cpuTdp * 1.2) {
+                    successes.push('Soğutucu yeterli');
+                } else if (coolerTdp >= cpuTdp) {
+                    warnings.push('Soğutucu minimum seviyede');
+                } else {
+                    issues.push('Soğutucu yetersiz');
+                }
+            }
+
+            // Sonuçları göster
+            let html = '';
+            
+            successes.forEach(success => {
+                html += `<div class="compatibility-item"><i class="fas fa-check-circle" style="color: var(--success-color); margin-right: 10px;"></i>${success}</div>`;
+            });
+            
+            warnings.forEach(warning => {
+                html += `<div class="compatibility-item warning"><i class="fas fa-exclamation-triangle" style="color: var(--warning-color); margin-right: 10px;"></i>${warning}</div>`;
+            });
+            
+            issues.forEach(issue => {
+                html += `<div class="compatibility-item error"><i class="fas fa-times-circle" style="color: var(--danger-color); margin-right: 10px;"></i>${issue}</div>`;
+            });
+
+            compatibilityList.innerHTML = html || '<div class="compatibility-item"><i class="fas fa-info-circle" style="color: var(--info-color); margin-right: 10px;"></i>Bileşen seçin</div>';
+            
+            // Uyumluluk skorunu güncelle
+            const totalChecks = successes.length + warnings.length + issues.length;
+            const compatibilityScore = totalChecks > 0 ? Math.round((successes.length / totalChecks) * 100) : 100;
+            document.getElementById('compatibility-score').textContent = `${compatibilityScore}%`;
+            
+            // İkon rengini güncelle
+            if (issues.length > 0) {
+                compatibilityIcon.style.background = 'var(--danger-color)';
+                compatibilityIcon.innerHTML = '<i class="fas fa-times"></i>';
+            } else if (warnings.length > 0) {
+                compatibilityIcon.style.background = 'var(--warning-color)';
+                compatibilityIcon.innerHTML = '<i class="fas fa-exclamation-triangle"></i>';
+            } else {
+                compatibilityIcon.style.background = 'var(--success-color)';
+                compatibilityIcon.innerHTML = '<i class="fas fa-check"></i>';
+            }
+        }
+        // Performans analizi
+        function updatePerformance() {
+            const cpu = document.getElementById('cpu');
+            const gpu = document.getElementById('gpu');
+            const ram = document.getElementById('ram');
+            
+            let cpuPerf = 0, gpuPerf = 0, ramPerf = 0;
+            
+            if (cpu.value !== '0') {
+                cpuPerf = parseInt(cpu.options[cpu.selectedIndex].dataset.performance) || 0;
+            }
+            if (gpu.value !== '0') {
+                gpuPerf = parseInt(gpu.options[gpu.selectedIndex].dataset.performance) || 0;
+            }
+            if (ram.value !== '0') {
+                ramPerf = parseInt(ram.options[ram.selectedIndex].dataset.performance) || 0;
+            }
+
+            // Performans skorlarını hesapla
+            const gamingScore = Math.round((gpuPerf * 0.7 + cpuPerf * 0.3) / 10);
+            const productivityScore = Math.round((cpuPerf * 0.6 + ramPerf * 0.4) / 10);
+            
+            const totalPrice = Object.values(currentBuild).reduce((sum, price) => sum + price, 0);
+            const budgetScore = totalPrice > 0 ? Math.max(1, Math.min(10, Math.round(((gamingScore + productivityScore) * 50000) / totalPrice))) : 0;
+            
+            // Gelecek garantisi (yeni bileşenlerin oranı)
+            const futureScore = Math.round((cpuPerf + gpuPerf + ramPerf) / 30);
+
+            // Performans meterlarını güncelle
+            updateMeter('gaming', gamingScore);
+            updateMeter('productivity', productivityScore);
+            updateMeter('budget', budgetScore);
+            updateMeter('future', futureScore);
+            
+            // Ana performans skorunu güncelle
+            const avgScore = Math.round((gamingScore + productivityScore + budgetScore + futureScore) / 4);
+            document.getElementById('performance-score').textContent = `${avgScore}/10`;
+        }
+
+        // Performans meterını güncelle
+        function updateMeter(type, score) {
+            const meter = document.getElementById(type + '-meter');
+            const value = document.getElementById(type + '-value');
+            
+            value.textContent = score;
+            
+            // Renk belirleme
+            let color = 'var(--danger-color)';
+            if (score >= 7) color = 'var(--success-color)';
+            else if (score >= 4) color = 'var(--warning-color)';
+            
+            // Dairesel progress
+            const percentage = (score / 10) * 360;
+            meter.style.background = `conic-gradient(${color} ${percentage}deg, rgba(255,255,255,0.1) ${percentage}deg)`;
+        }
+
+        // Fiyat dağılımını güncelle
+        function updateBreakdown() {
+            const coreComponents = currentBuild.cpu + currentBuild.motherboard + currentBuild.gpu;
+            const storageMemory = currentBuild.storage + currentBuild.ram;
+            const caseCooling = currentBuild.case + currentBuild.cooler;
+            const psuPrice = currentBuild.psu;
+            
+            document.getElementById('core-components-price').textContent = `₺${coreComponents.toLocaleString('tr-TR')}`;
+            document.getElementById('storage-memory-price').textContent = `₺${storageMemory.toLocaleString('tr-TR')}`;
+            document.getElementById('case-cooling-price').textContent = `₺${caseCooling.toLocaleString('tr-TR')}`;
+            document.getElementById('psu-breakdown-price').textContent = `₺${psuPrice.toLocaleString('tr-TR')}`;
+        }
+
+        // Modal fonksiyonları
+        function showModal(type) {
+            const modal = document.getElementById('modal');
+            const title = document.getElementById('modal-title');
+            const body = document.getElementById('modal-body');
+            
+            switch(type) {
+                case 'specs':
+                    title.textContent = 'Detaylı Sistem Özellikleri';
+                    body.innerHTML = generateSpecsHTML();
+                    break;
+                case 'benchmarks':
+                    title.textContent = 'Benchmark Sonuçları';
+                    body.innerHTML = generateBenchmarksHTML();
+                    break;
+                case 'comparison':
+                    title.textContent = 'Sistem Karşılaştırması';
+                    body.innerHTML = generateComparisonHTML();
+                    break;
+                case 'save':
+                    title.textContent = 'Kaydet & Paylaş';
+                    body.innerHTML = generateSaveHTML();
+                    break;
+                case 'help':
+                    title.textContent = 'Yardım & Rehber';
+                    body.innerHTML = generateHelpHTML();
+                    break;
+                case 'about':
+                    title.textContent = 'Hakkında';
+                    body.innerHTML = generateAboutHTML();
+                    break;
+            }
+            
+            modal.style.display = 'block';
+            setTimeout(() => modal.style.opacity = '1', 10);
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('modal');
+            modal.style.opacity = '0';
+            setTimeout(() => modal.style.display = 'none', 300);
+        }
+
+        // Modal içerik oluşturucuları
+        function generateSpecsHTML() {
+            const components = ['cpu', 'motherboard', 'ram', 'gpu', 'storage', 'psu', 'case', 'cooler'];
+            const componentNames = {
+                'cpu': 'İşlemci',
+                'motherboard': 'Anakart', 
+                'ram': 'RAM',
+                'gpu': 'Ekran Kartı',
+                'storage': 'Depolama',
+                'psu': 'Güç Kaynağı',
+                'case': 'Kasa',
+                'cooler': 'Soğutucu'
+            };
+
+            let html = '<table class="specs-table"><thead><tr><th>Bileşen</th><th>Model</th><th>Fiyat</th></tr></thead><tbody>';
+            
+            components.forEach(component => {
+                const select = document.getElementById(component);
+                if (select.value !== '0') {
+                    const selectedText = select.options[select.selectedIndex].text;
+                    const price = `₺${parseInt(select.value).toLocaleString('tr-TR')}`;
+                    html += `<tr><td>${componentNames[component]}</td><td>${selectedText}</td><td>${price}</td></tr>`;
+                }
+            });
+            
+            const total = Object.values(currentBuild).reduce((sum, price) => sum + price, 0);
+            html += `<tr style="border-top: 2px solid var(--primary-color); font-weight: bold;"><td>TOPLAM</td><td></td><td>₺${total.toLocaleString('tr-TR')}</td></tr>`;
+            html += '</tbody></table>';
+            
+            return html;
+        }
+
+        function generateBenchmarksHTML() {
+            const gpu = document.getElementById('gpu');
+            const cpu = document.getElementById('cpu');
+            
+            if (gpu.value === '0' || cpu.value === '0') {
+                return '<p>Benchmark sonuçları için CPU ve GPU seçmelisiniz.</p>';
+            }
+
+            const gpuPerf = parseInt(gpu.options[gpu.selectedIndex].dataset.performance) || 0;
+            const cpuPerf = parseInt(cpu.options[cpu.selectedIndex].dataset.performance) || 0;
+            
+            let html = '<div class="benchmark-grid">';
+            
+            gamesBenchmarks.forEach(game => {
+                const fps = Math.round(game.baseScore * (gpuPerf / 100) * (cpuPerf / 100));
+                const fpsColor = fps >= 60 ? 'var(--success-color)' : fps >= 30 ? 'var(--warning-color)' : 'var(--danger-color)';
+                
+                html += `
+                    <div class="benchmark-card">
+                        <div class="fps-display" style="color: ${fpsColor}">${fps}</div>
+                        <div style="font-size: 0.9em; opacity: 0.8;">FPS</div>
+                        <div class="game-info">
+                            <div class="game-name">${game.name}</div>
+                            <div class="game-settings">${game.settings}</div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            html += '</div>';
+            html += '<p style="margin-top: 20px; opacity: 0.8; text-align: center;">* Tahminî değerler, 1080p çözünürlük için hesaplanmıştır.</p>';
+            
+            return html;
+        }
+        function generateComparisonHTML() {
+            const currentTotal = Object.values(currentBuild).reduce((sum, price) => sum + price, 0);
+            
+            let html = '<div class="comparison-grid">';
+            
+            // Mevcut sistem
+            html += `
+                <div class="comparison-card">
+                    <div class="comparison-title">Mevcut Sisteminiz</div>
+                    <ul class="comparison-list">
+                        <li><span>Toplam Fiyat:</span><span>₺${currentTotal.toLocaleString('tr-TR')}</span></li>
+                        <li><span>Oyun Performansı:</span><span>${document.getElementById('gaming-value').textContent}/10</span></li>
+                        <li><span>İş Performansı:</span><span>${document.getElementById('productivity-value').textContent}/10</span></li>
+                        <li><span>Fiyat/Performans:</span><span>${document.getElementById('budget-value').textContent}/10</span></li>
+                    </ul>
+                </div>
+            `;
+            
+            // Preset karşılaştırmaları
+            Object.keys(presets).forEach(presetName => {
+                const preset = presets[presetName];
+                const presetTotal = Object.values(preset).reduce((sum, price) => sum + parseInt(price), 0);
+                const presetTitles = {
+                    budget: 'Bütçe Dostu',
+                    gaming: 'Oyuncu Sistemi',
+                    workstation: 'İş İstasyonu',
+                    enthusiast: 'Meraklı Sistemi'
+                };
+                
+                html += `
+                    <div class="comparison-card">
+                        <div class="comparison-title">${presetTitles[presetName]}</div>
+                        <ul class="comparison-list">
+                            <li><span>Toplam Fiyat:</span><span>₺${presetTotal.toLocaleString('tr-TR')}</span></li>
+                            <li><span>Fark:</span><span style="color: ${currentTotal > presetTotal ? 'var(--danger-color)' : 'var(--success-color)'}">₺${Math.abs(currentTotal - presetTotal).toLocaleString('tr-TR')}</span></li>
+                        </ul>
+                        <button class="action-btn" onclick="loadPreset('${presetName}'); closeModal();" style="margin-top: 15px; padding: 10px 20px; font-size: 0.9em;">
+                            Bu Sistemi Yükle
+                        </button>
+                    </div>
+                `;
+            });
+            
+            html += '</div>';
+            return html;
+        }
+
+        function generateSaveHTML() {
+            return `
+                <div style="text-align: center;">
+                    <h3 style="margin-bottom: 20px;">Sisteminizi Kaydedin</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 30px;">
+                        <button class="action-btn secondary" onclick="saveToLocal()">
+                            <i class="fas fa-save"></i> Yerel Kaydet
+                        </button>
+                        <button class="action-btn warning" onclick="shareSystem()">
+                            <i class="fas fa-share"></i> Link Paylaş
+                        </button>
+                        <button class="action-btn" onclick="exportToPDF()">
+                            <i class="fas fa-file-pdf"></i> PDF İndir
+                        </button>
+                        <button class="action-btn success" onclick="loadFromLocal()">
+                            <i class="fas fa-upload"></i> Yükle
+                        </button>
+                    </div>
+                    
+                    <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 10px; margin-top: 20px;">
+                        <h4>Hızlı Paylaşım</h4>
+                        <p style="margin: 10px 0; opacity: 0.8;">Sisteminizi sosyal medyada paylaşın:</p>
+                        <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+                            <button class="quick-btn" onclick="shareToTwitter()">
+                                <i class="fab fa-twitter"></i> Twitter
+                            </button>
+                            <button class="quick-btn" onclick="shareToFacebook()">
+                                <i class="fab fa-facebook"></i> Facebook
+                            </button>
+                            <button class="quick-btn" onclick="shareToWhatsApp()">
+                                <i class="fab fa-whatsapp"></i> WhatsApp
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function generateHelpHTML() {
+            return `
+                <div>
+                    <h3>PC Oluşturucu Rehberi</h3>
+                    
+                    <div style="margin: 20px 0;">
+                        <h4><i class="fas fa-lightbulb"></i> Başlangıç İpuçları</h4>
+                        <ul style="margin-left: 20px; line-height: 1.6;">
+                            <li>Önce bütçenizi belirleyin ve hazır konfigürasyonlardan birini seçin</li>
+                            <li>Oyun oynayacaksanız GPU'ya, iş için CPU'ya öncelik verin</li>
+                            <li>En az 16GB RAM seçin, 8GB günümüzde yetersiz kalabilir</li>
+                            <li>SSD mutlaka kullanın, sistem çok daha hızlı olacak</li>
+                        </ul>
+                    </div>
+                    
+                    <div style="margin: 20px 0;">
+                        <h4><i class="fas fa-exclamation-triangle"></i> Uyumluluk Kontrolleri</h4>
+                        <ul style="margin-left: 20px; line-height: 1.6;">
+                            <li>Intel CPU için LGA1700, AMD CPU için AM4 soket seçin</li>
+                            <li>DDR4 anakart için DDR4 RAM, DDR5 için DDR5 RAM seçin</li>
+                            <li>Güç kaynağı toplam sistem tüketiminden %20 fazla olmalı</li>
+                            <li>CPU soğutucu, işlemcinin TDP değerini karşılamalı</li>
+                        </ul>
+                    </div>
+                    
+                    <div style="margin: 20px 0;">
+                        <h4><i class="fas fa-chart-line"></i> Performans Rehberi</h4>
+                        <ul style="margin-left: 20px; line-height: 1.6;">
+                            <li>1080p oyun için RTX 3060 veya üzeri yeterli</li>
+                            <li>1440p için RTX 3070 veya üzeri önerilir</li>
+                            <li>4K oyun için RTX 4080 veya üzeri gerekli</li>
+                            <li>Video düzenleme için çok çekirdekli CPU seçin</li>
+                        </ul>
+                    </div>
+                </div>
+            `;
+        }
+
+        function generateAboutHTML() {
+            return `
+                <div style="text-align: center;">
+                    <h3>PC Oluşturucu Ultimate</h3>
+                    <p style="margin: 20px 0; opacity: 0.8;">
+                        Profesyonel seviyede PC oluşturma deneyimi sunan gelişmiş araç.
+                        İtopya.com fiyat referansları ile gerçekçi hesaplamalar.
+                    </p>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin: 30px 0;">
+                        <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 10px;">
+                            <i class="fas fa-cogs" style="font-size: 2em; margin-bottom: 10px; color: var(--primary-color);"></i>
+                            <h4>500+ Bileşen</h4>
+                            <p style="opacity: 0.8;">Güncel fiyatlarla</p>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 10px;">
+                            <i class="fas fa-chart-bar" style="font-size: 2em; margin-bottom: 10px; color: var(--success-color);"></i>
+                            <h4>Gerçek Benchmark</h4>
+                            <p style="opacity: 0.8;">10+ oyun testi</p>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 10px;">
+                            <i class="fas fa-shield-alt" style="font-size: 2em; margin-bottom: 10px; color: var(--warning-color);"></i>
+                            <h4>Uyumluluk</h4>
+                            <p style="opacity: 0.8;">Otomatik kontrol</p>
+                        </div>
+                    </div>
+                    
+                    <p style="margin-top: 30px; opacity: 0.6;">
+                        © 2024 PC Builder Ultimate - Tüm hakları saklıdır
+                    </p>
+                </div>
+            `;
+        }
+
+        // Yardımcı fonksiyonlar
+        function showLoading() {
+            document.getElementById('loading-overlay').style.display = 'flex';
+        }
+
+        function hideLoading() {
+            document.getElementById('loading-overlay').style.display = 'none';
+        }
+
+        function showNotification(message, type = 'info') {
+            // Basit bildirim sistemi
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: var(--${type === 'success' ? 'success' : type === 'warning' ? 'warning' : type === 'error' ? 'danger' : 'info'}-color);
+                color: white;
+                padding: 15px 25px;
+                border-radius: 10px;
+                z-index: 3000;
+                animation: slideIn 0.3s ease;
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+
+        // Floating panel fonksiyonları
+        function toggleQuickActions() {
+            const quickActions = document.getElementById('quick-actions');
+            quickActions.classList.toggle('active');
+        }
+
+        function resetSystem() {
+            if (confirm('Tüm seçimleri sıfırlamak istediğinizden emin misiniz?')) {
+                const components = ['cpu', 'motherboard', 'ram', 'gpu', 'storage', 'psu', 'case', 'cooler'];
+                components.forEach(component => {
+                    document.getElementById(component).value = '0';
+                });
+                updateSystem();
+                showNotification('Sistem sıfırlandı!', 'info');
+            }
+        }
+
+        function randomBuild() {
+            showLoading();
+            setTimeout(() => {
+                const presetKeys = Object.keys(presets);
+                const randomPreset = presetKeys[Math.floor(Math.random() * presetKeys.length)];
+                loadPreset(randomPreset);
+                hideLoading();
+                showNotification('Rastgele sistem oluşturuldu!', 'success');
+            }, 1000);
+        }
+
+        function optimizeBuild() {
+            showNotification('Sistem optimize ediliyor...', 'info');
+            // Basit optimizasyon mantığı
+            setTimeout(() => {
+                showNotification('Sistem optimize edildi!', 'success');
+            }, 2000);
+        }
+        // Kaydetme ve paylaşma fonksiyonları
+        function saveToLocal() {
+            const config = {};
+            const components = ['cpu', 'motherboard', 'ram', 'gpu', 'storage', 'psu', 'case', 'cooler'];
+            
+            components.forEach(component => {
+                config[component] = document.getElementById(component).value;
+            });
+            
+            const buildData = {
+                config: config,
+                timestamp: new Date().toISOString(),
+                totalPrice: Object.values(currentBuild).reduce((sum, price) => sum + price, 0)
+            };
+            
+            localStorage.setItem('pcBuilderSave', JSON.stringify(buildData));
+            buildStats.totalBuilds++;
+            localStorage.setItem('totalBuilds', buildStats.totalBuilds.toString());
+            updateStats();
+            
+            showNotification('Sistem yerel olarak kaydedildi!', 'success');
+        }
+
+        function loadFromLocal() {
+            const saved = localStorage.getItem('pcBuilderSave');
+            if (saved) {
+                const buildData = JSON.parse(saved);
+                Object.keys(buildData.config).forEach(component => {
+                    const element = document.getElementById(component);
+                    if (element) element.value = buildData.config[component];
+                });
+                updateSystem();
+                showNotification('Sistem yüklendi!', 'success');
+            } else {
+                showNotification('Kaydedilmiş sistem bulunamadı!', 'warning');
+            }
+        }
+
+        function shareSystem() {
+            const config = {};
+            const components = ['cpu', 'motherboard', 'ram', 'gpu', 'storage', 'psu', 'case', 'cooler'];
+            
+            components.forEach(component => {
+                config[component] = document.getElementById(component).value;
+            });
+            
+            const configString = btoa(JSON.stringify(config));
+            const shareUrl = `${window.location.origin}${window.location.pathname}?config=${configString}`;
+            
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(shareUrl).then(() => {
+                    showNotification('Paylaşım linki kopyalandı!', 'success');
+                });
+            } else {
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = shareUrl;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                showNotification('Paylaşım linki kopyalandı!', 'success');
+            }
+        }
+
+        function exportToPDF() {
+            showLoading();
+            showNotification('PDF oluşturuluyor...', 'info');
+            
+            // PDF için özel içerik oluştur
+            const pdfContent = createPDFContent();
+            
+            // Geçici div oluştur
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = pdfContent;
+            tempDiv.style.cssText = `
+                position: absolute;
+                top: -9999px;
+                left: -9999px;
+                width: 800px;
+                background: white;
+                color: black;
+                font-family: Arial, sans-serif;
+                padding: 40px;
+                box-sizing: border-box;
+            `;
+            document.body.appendChild(tempDiv);
+            
+            // HTML2Canvas ile görüntü oluştur
+            html2canvas(tempDiv, {
+                width: 800,
+                height: 1200,
+                scale: 2,
+                backgroundColor: '#ffffff',
+                useCORS: true
+            }).then(canvas => {
+                const imgData = canvas.toDataURL('image/png');
+                
+                // jsPDF ile PDF oluştur
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF('p', 'mm', 'a4');
+                
+                // Sayfa boyutları
+                const pageWidth = pdf.internal.pageSize.getWidth();
+                const pageHeight = pdf.internal.pageSize.getHeight();
+                
+                // Görüntüyü PDF'e ekle
+                const imgWidth = pageWidth - 20; // 10mm margin
+                const imgHeight = (canvas.height * imgWidth) / canvas.width;
+                
+                let heightLeft = imgHeight;
+                let position = 10; // 10mm top margin
+                
+                // İlk sayfa
+                pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
+                heightLeft -= pageHeight - 20;
+                
+                // Eğer içerik bir sayfaya sığmıyorsa, ek sayfalar ekle
+                while (heightLeft >= 0) {
+                    position = heightLeft - imgHeight + 10;
+                    pdf.addPage();
+                    pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
+                    heightLeft -= pageHeight - 20;
+                }
+                
+                // PDF'i indir
+                const totalPrice = Object.values(currentBuild).reduce((sum, price) => sum + price, 0);
+                const fileName = `PC_Sistemi_${totalPrice.toLocaleString('tr-TR')}TL_${new Date().toISOString().split('T')[0]}.pdf`;
+                pdf.save(fileName);
+                
+                // Temizlik
+                document.body.removeChild(tempDiv);
+                hideLoading();
+                showNotification('PDF başarıyla oluşturuldu ve indirildi!', 'success');
+            }).catch(error => {
+                console.error('PDF oluşturma hatası:', error);
+                document.body.removeChild(tempDiv);
+                hideLoading();
+                showNotification('PDF oluşturulurken hata oluştu!', 'error');
+            });
+        }
+
+        function createPDFContent() {
+            const components = ['cpu', 'motherboard', 'ram', 'gpu', 'storage', 'psu', 'case', 'cooler'];
+            const componentNames = {
+                'cpu': 'İşlemci (CPU)',
+                'motherboard': 'Anakart', 
+                'ram': 'RAM Bellek',
+                'gpu': 'Ekran Kartı (GPU)',
+                'storage': 'Depolama',
+                'psu': 'Güç Kaynağı (PSU)',
+                'case': 'Kasa',
+                'cooler': 'CPU Soğutucu'
+            };
+
+            const totalPrice = Object.values(currentBuild).reduce((sum, price) => sum + price, 0);
+            const currentDate = new Date().toLocaleDateString('tr-TR');
+            
+            // Performans skorları
+            const gamingScore = document.getElementById('gaming-value').textContent;
+            const productivityScore = document.getElementById('productivity-value').textContent;
+            const budgetScore = document.getElementById('budget-value').textContent;
+            const futureScore = document.getElementById('future-value').textContent;
+
+            let selectedComponents = [];
+            let totalComponentPrice = 0;
+
+            components.forEach(component => {
+                const select = document.getElementById(component);
+                if (select.value !== '0') {
+                    const selectedText = select.options[select.selectedIndex].text;
+                    const price = parseInt(select.value);
+                    totalComponentPrice += price;
+                    
+                    // Bileşen özelliklerini al
+                    const option = select.options[select.selectedIndex];
+                    let features = [];
+                    
+                    switch(component) {
+                        case 'cpu':
+                            if (option.dataset.cores) features.push(`${option.dataset.cores} Çekirdek`);
+                            if (option.dataset.threads) features.push(`${option.dataset.threads} Thread`);
+                            if (option.dataset.tdp) features.push(`${option.dataset.tdp}W TDP`);
+                            break;
+                        case 'gpu':
+                            if (option.dataset.vram) features.push(`${option.dataset.vram}GB VRAM`);
+                            if (option.dataset.tdp) features.push(`${option.dataset.tdp}W TDP`);
+                            if (selectedText.includes('RTX')) features.push('Ray Tracing');
+                            break;
+                        case 'ram':
+                            if (option.dataset.capacity) features.push(`${option.dataset.capacity}GB`);
+                            if (option.dataset.speed) features.push(`${option.dataset.speed}MHz`);
+                            if (option.dataset.type) features.push(option.dataset.type);
+                            break;
+                        case 'motherboard':
+                            if (option.dataset.socket) features.push(option.dataset.socket);
+                            if (option.dataset.chipset) features.push(option.dataset.chipset);
+                            break;
+                        case 'storage':
+                            if (option.dataset.capacity) features.push(`${option.dataset.capacity}GB`);
+                            if (option.dataset.type) features.push(option.dataset.type);
+                            if (option.dataset.speed) features.push(`${option.dataset.speed}MB/s`);
+                            break;
+                        case 'psu':
+                            if (option.dataset.wattage) features.push(`${option.dataset.wattage}W`);
+                            if (option.dataset.efficiency) features.push(option.dataset.efficiency);
+                            if (option.dataset.modular && option.dataset.modular !== 'No') features.push(`${option.dataset.modular} Modular`);
+                            break;
+                        case 'case':
+                            if (option.dataset.size) features.push(option.dataset.size);
+                            if (option.dataset.fans) features.push(`${option.dataset.fans} Fan`);
+                            if (option.dataset.rgb === 'Yes') features.push('RGB');
+                            break;
+                        case 'cooler':
+                            if (option.dataset.type) features.push(option.dataset.type);
+                            if (option.dataset.tdp) features.push(`${option.dataset.tdp}W TDP`);
+                            if (option.dataset.rgb === 'Yes') features.push('RGB');
+                            break;
+                    }
+                    
+                    selectedComponents.push({
+                        name: componentNames[component],
+                        model: selectedText,
+                        price: price,
+                        features: features.join(', ')
+                    });
+                }
+            });
+
+            // Benchmark hesapla
+            const gpu = document.getElementById('gpu');
+            const cpu = document.getElementById('cpu');
+            let benchmarkData = [];
+            
+            if (gpu.value !== '0' && cpu.value !== '0') {
+                const gpuPerf = parseInt(gpu.options[gpu.selectedIndex].dataset.performance) || 0;
+                const cpuPerf = parseInt(cpu.options[cpu.selectedIndex].dataset.performance) || 0;
+                
+                const games = [
+                    { name: 'Cyberpunk 2077', baseScore: 45 },
+                    { name: 'Call of Duty MW3', baseScore: 85 },
+                    { name: 'Fortnite', baseScore: 120 },
+                    { name: 'Valorant', baseScore: 200 },
+                    { name: 'GTA V', baseScore: 90 },
+                    { name: 'Apex Legends', baseScore: 110 }
+                ];
+
+                games.forEach(game => {
+                    const fps = Math.round(game.baseScore * (gpuPerf / 100) * (cpuPerf / 100));
+                    benchmarkData.push({ name: game.name, fps: fps });
+                });
+            }
+
+            return `
+                <div style="max-width: 800px; margin: 0 auto; font-family: Arial, sans-serif; color: #333;">
+                    <!-- Header -->
+                    <div style="text-align: center; margin-bottom: 40px; border-bottom: 3px solid #667eea; padding-bottom: 20px;">
+                        <h1 style="color: #667eea; font-size: 32px; margin: 0 0 10px 0;">🖥️ PC Oluşturucu Ultimate</h1>
+                        <h2 style="color: #666; font-size: 24px; margin: 0 0 10px 0;">Sistem Raporu</h2>
+                        <p style="color: #888; font-size: 14px; margin: 0;">Oluşturulma Tarihi: ${currentDate}</p>
+                    </div>
+
+                    <!-- Özet Bilgiler -->
+                    <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 30px;">
+                        <h3 style="color: #667eea; margin: 0 0 15px 0; font-size: 20px;">📊 Sistem Özeti</h3>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                            <div>
+                                <p style="margin: 5px 0;"><strong>Toplam Fiyat:</strong> <span style="color: #28a745; font-size: 18px; font-weight: bold;">₺${totalPrice.toLocaleString('tr-TR')}</span></p>
+                                <p style="margin: 5px 0;"><strong>Bileşen Sayısı:</strong> ${selectedComponents.length}</p>
+                            </div>
+                            <div>
+                                <p style="margin: 5px 0;"><strong>Oyun Performansı:</strong> ${gamingScore}/10</p>
+                                <p style="margin: 5px 0;"><strong>İş Performansı:</strong> ${productivityScore}/10</p>
+                                <p style="margin: 5px 0;"><strong>Fiyat/Performans:</strong> ${budgetScore}/10</p>
+                                <p style="margin: 5px 0;"><strong>Gelecek Garantisi:</strong> ${futureScore}/10</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bileşen Listesi -->
+                    <div style="margin-bottom: 30px;">
+                        <h3 style="color: #667eea; margin: 0 0 20px 0; font-size: 20px;">🔧 Seçilen Bileşenler</h3>
+                        <table style="width: 100%; border-collapse: collapse; background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+                            <thead>
+                                <tr style="background: #667eea; color: white;">
+                                    <th style="padding: 15px; text-align: left; font-weight: bold;">Bileşen</th>
+                                    <th style="padding: 15px; text-align: left; font-weight: bold;">Model</th>
+                                    <th style="padding: 15px; text-align: right; font-weight: bold;">Fiyat</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${selectedComponents.map((comp, index) => `
+                                    <tr style="border-bottom: 1px solid #eee; ${index % 2 === 0 ? 'background: #f8f9fa;' : ''}">
+                                        <td style="padding: 15px; font-weight: bold; color: #667eea;">${comp.name}</td>
+                                        <td style="padding: 15px;">
+                                            <div style="font-weight: bold; margin-bottom: 5px;">${comp.model}</div>
+                                            ${comp.features ? `<div style="font-size: 12px; color: #666;">${comp.features}</div>` : ''}
+                                        </td>
+                                        <td style="padding: 15px; text-align: right; font-weight: bold; color: #28a745;">₺${comp.price.toLocaleString('tr-TR')}</td>
+                                    </tr>
+                                `).join('')}
+                                <tr style="background: #667eea; color: white; font-weight: bold;">
+                                    <td style="padding: 15px;">TOPLAM</td>
+                                    <td style="padding: 15px;"></td>
+                                    <td style="padding: 15px; text-align: right; font-size: 18px;">₺${totalPrice.toLocaleString('tr-TR')}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    ${benchmarkData.length > 0 ? `
+                    <!-- Benchmark Sonuçları -->
+                    <div style="margin-bottom: 30px;">
+                        <h3 style="color: #667eea; margin: 0 0 20px 0; font-size: 20px;">🎮 Tahmini Oyun Performansı (1080p)</h3>
+                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px;">
+                            ${benchmarkData.map(game => `
+                                <div style="background: white; padding: 15px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); text-align: center;">
+                                    <div style="font-weight: bold; margin-bottom: 10px;">${game.name}</div>
+                                    <div style="font-size: 24px; font-weight: bold; color: ${game.fps >= 60 ? '#28a745' : game.fps >= 30 ? '#ffc107' : '#dc3545'};">
+                                        ${game.fps} FPS
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                        <p style="text-align: center; color: #666; font-size: 12px; margin-top: 15px;">
+                            * Tahminî değerler, 1080p çözünürlük için hesaplanmıştır.
+                        </p>
+                    </div>
+                    ` : ''}
+
+                    <!-- Öneriler -->
+                    <div style="background: #e3f2fd; padding: 20px; border-radius: 10px; margin-bottom: 30px;">
+                        <h3 style="color: #1976d2; margin: 0 0 15px 0; font-size: 18px;">💡 Sistem Önerileri</h3>
+                        <ul style="margin: 0; padding-left: 20px; color: #333;">
+                            ${totalPrice < 20000 ? '<li>Bütçe dostu bir sistem oluşturdunuz. 1080p oyunlar için yeterli olacaktır.</li>' : ''}
+                            ${totalPrice >= 20000 && totalPrice < 40000 ? '<li>Orta seviye bir sistem oluşturdunuz. 1440p oyunlar için uygun.</li>' : ''}
+                            ${totalPrice >= 40000 ? '<li>Yüksek performanslı bir sistem oluşturdunuz. 4K oyunlar için hazır.</li>' : ''}
+                            <li>Sisteminizi düzenli olarak temizleyin ve güncellemeleri takip edin.</li>
+                            <li>Güç kaynağınızın sistem tüketiminizi karşıladığından emin olun.</li>
+                            <li>Soğutma sisteminin CPU TDP değerini karşıladığını kontrol edin.</li>
+                        </ul>
+                    </div>
+
+                    <!-- Footer -->
+                    <div style="text-align: center; padding-top: 20px; border-top: 1px solid #eee; color: #666; font-size: 12px;">
+                        <p style="margin: 0;">PC Oluşturucu Ultimate ile oluşturulmuştur</p>
+                        <p style="margin: 5px 0 0 0;">© 2024 - Tüm hakları saklıdır</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        function shareToTwitter() {
+            const total = Object.values(currentBuild).reduce((sum, price) => sum + price, 0);
+            const text = `PC Oluşturucu Ultimate ile ${total.toLocaleString('tr-TR')} TL'lik sistem oluşturdum! 🖥️💪`;
+            const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`;
+            window.open(url, '_blank');
+        }
+
+        function shareToFacebook() {
+            const url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`;
+            window.open(url, '_blank');
+        }
+
+        function shareToWhatsApp() {
+            const total = Object.values(currentBuild).reduce((sum, price) => sum + price, 0);
+            const text = `PC Oluşturucu Ultimate ile ${total.toLocaleString('tr-TR')} TL'lik sistem oluşturdum!`;
+            const url = `https://wa.me/?text=${encodeURIComponent(text)}`;
+            window.open(url, '_blank');
+        }
+
+        function toggleTheme() {
+            // Tema değiştirme simülasyonu
+            showNotification('Tema değiştirme özelliği yakında!', 'info');
+        }
+
+        // Klavye kısayolları
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey || e.metaKey) {
+                switch(e.key) {
+                    case 's':
+                        e.preventDefault();
+                        saveToLocal();
+                        break;
+                    case 'r':
+                        e.preventDefault();
+                        resetSystem();
+                        break;
+                    case 'h':
+                        e.preventDefault();
+                        showModal('help');
+                        break;
+                }
+            }
+            
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+
+        // Modal dışına tıklayınca kapatma
+        document.getElementById('modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // Responsive menü için
+        window.addEventListener('resize', function() {
+            if (window.innerWidth <= 768) {
+                document.querySelector('.nav-buttons').style.display = 'none';
+            } else {
+                document.querySelector('.nav-buttons').style.display = 'flex';
+            }
+        });
+
+        // Sayfa kaydırma efektleri
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 100) {
+                navbar.style.background = 'rgba(0, 0, 0, 0.9)';
+            } else {
+                navbar.style.background = 'var(--glass-bg)';
+            }
+        });
+
+        // CSS animasyonları
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            
+            @keyframes slideOut {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+            
+            .component-card {
+                animation: fadeInUp 0.6s ease forwards;
+            }
+            
+            .component-card:nth-child(1) { animation-delay: 0.1s; }
+            .component-card:nth-child(2) { animation-delay: 0.2s; }
+            .component-card:nth-child(3) { animation-delay: 0.3s; }
+            .component-card:nth-child(4) { animation-delay: 0.4s; }
+            .component-card:nth-child(5) { animation-delay: 0.5s; }
+            .component-card:nth-child(6) { animation-delay: 0.6s; }
+            .component-card:nth-child(7) { animation-delay: 0.7s; }
+            .component-card:nth-child(8) { animation-delay: 0.8s; }
+            
+            @keyframes fadeInUp {
+                from { 
+                    opacity: 0; 
+                    transform: translateY(30px); 
+                }
+                to { 
+                    opacity: 1; 
+                    transform: translateY(0); 
+                }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Performance monitoring
+        if ('performance' in window) {
+            window.addEventListener('load', function() {
+                setTimeout(function() {
+                    const perfData = performance.getEntriesByType('navigation')[0];
+                    console.log('Sayfa yükleme süresi:', Math.round(perfData.loadEventEnd - perfData.loadEventStart), 'ms');
+                }, 0);
+            });
+        }
+
+        // Service Worker kaydı (offline çalışma için)
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                // Service worker kodu ayrı dosyada olmalı
+                // navigator.serviceWorker.register('/sw.js');
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PC Builder Pro - Sistem Kurulumu</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0078d4 0%, #106ebe 100%);
+            min-height: 100vh;
+            color: white;
+            overflow-x: hidden;
+        }
+
+        .top-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(45deg, #00d4ff, #0078d4);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .logo-text {
+            font-size: 1.4em;
+            font-weight: 600;
+            color: white;
+        }
+
+        .language-selector {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .lang-dropdown {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 6px;
+            padding: 8px 12px;
+            color: white;
+            cursor: pointer;
+            font-size: 0.9em;
+        }
+
+        .lang-dropdown:focus {
+            outline: 2px solid #00d4ff;
+        }
+
+        .main-container {
+            margin-top: 80px;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: calc(100vh - 80px);
+        }
+
+        .setup-container {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            border-radius: 12px;
+            padding: 30px;
+            width: 95%;
+            max-width: 1400px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+        }
+
+        .installer-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .installer-title {
+            font-size: 2.2em;
+            margin-bottom: 8px;
+            font-weight: 300;
+        }
+
+        .installer-subtitle {
+            font-size: 1.1em;
+            opacity: 0.8;
+            font-weight: 300;
+        }
+
+        .progress-section {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+            display: none;
+        }
+
+        .progress-text {
+            font-size: 1.1em;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .progress-bar-container {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            height: 20px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-bar {
+            background: linear-gradient(90deg, #00d4ff, #0078d4);
+            height: 100%;
+            width: 0%;
+            border-radius: 10px;
+            transition: width 0.3s ease;
+            position: relative;
+        }
+
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .progress-percentage {
+            text-align: center;
+            margin-top: 10px;
+            font-weight: 600;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #fff, #e0e0e0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .components-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .component-card {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            padding: 18px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .component-card:hover {
+            transform: translateY(-2px);
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .component-title {
+            font-size: 1.1em;
+            margin-bottom: 12px;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+        }
+
+        .component-icon {
+            width: 20px;
+            height: 20px;
+            background: linear-gradient(45deg, #00d4ff, #0078d4);
+            border-radius: 4px;
+            display: inline-block;
+        }
+
+        select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            font-size: 0.95em;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: #00d4ff;
+            box-shadow: 0 0 0 2px rgba(0, 212, 255, 0.2);
+        }
+
+        .price-display {
+            font-weight: 600;
+            color: #00ff88;
+            font-size: 1em;
+            text-align: right;
+            text-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
+        }
+
+        .total-section {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            padding: 25px;
+            text-align: center;
+            margin-top: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .total-price {
+            font-size: 2.2em;
+            font-weight: 300;
+            color: #00ff88;
+            margin-bottom: 8px;
+            text-shadow: 0 0 20px rgba(0, 255, 136, 0.4);
+        }
+
+        .total-label {
+            font-size: 1.1em;
+            opacity: 0.9;
+            margin-bottom: 20px;
+        }
+
+        .build-button {
+            background: linear-gradient(45deg, #00d4ff, #0078d4);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1.1em;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .build-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 212, 255, 0.3);
+        }
+
+        .build-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .specs-summary {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 25px;
+            margin-top: 20px;
+            text-align: left;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .specs-summary h3 {
+            margin-bottom: 20px;
+            color: #fff;
+            font-size: 1.3em;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .spec-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .spec-item:last-child {
+            border-bottom: none;
+        }
+
+        .spec-label {
+            font-weight: 500;
+            color: #00d4ff;
+        }
+
+        .spec-value {
+            color: #fff;
+            text-align: right;
+            max-width: 60%;
+        }
+
+        .performance-indicator {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+        }
+
+        .performance-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .badge-budget { background: #ff6b6b; }
+        .badge-mid { background: #4ecdc4; }
+        .badge-high { background: #45b7d1; }
+        .badge-extreme { background: #f9ca24; color: #333; }
+
+        @media (max-width: 768px) {
+            .components-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .top-bar {
+                padding: 0 15px;
+            }
+            
+            .logo-text {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="top-bar">
+        <div class="logo-section">
+            <div class="logo">PC</div>
+            <div class="logo-text">PC Builder Pro</div>
+        </div>
+        <div class="language-selector">
+            <span>🌐</span>
+            <select class="lang-dropdown" onchange="changeLanguage(this.value)">
+                <option value="tr">Türkçe</option>
+                <option value="en">English</option>
+                <option value="de">Deutsch</option>
+                <option value="fr">Français</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="main-container">
+        <div class="setup-container">
+            <div class="installer-header">
+                <h1 class="installer-title" id="main-title">Bilgisayar Yapılandırması</h1>
+                <p class="installer-subtitle" id="main-subtitle">Hayalinizdeki sistemi oluşturun</p>
+            </div>
+
+            <div class="progress-section" id="progress-section">
+                <div class="progress-text" id="progress-text">PC oluşturuluyor...</div>
+                <div class="progress-bar-container">
+                    <div class="progress-bar" id="progress-bar"></div>
+                </div>
+                <div class="progress-percentage" id="progress-percentage">0%</div>
+            </div>
+
+            <div class="components-grid">
+                <div class="component-card">
+                    <div class="component-title">
+                        <span class="component-icon"></span>
+                        <span id="cpu-title">İşlemci (CPU)</span>
+                    </div>
+                    <select id="cpu" onchange="updatePrice()">
+                        <option value="0">Seçiniz...</option>
+                        <optgroup label="Intel Budget">
+                            <option value="2800">Intel Core i3-12100F - ₺2.800</option>
+                            <option value="3200">Intel Core i5-12400F - ₺3.200</option>
+                            <option value="3800">Intel Core i5-12600KF - ₺3.800</option>
+                        </optgroup>
+                        <optgroup label="Intel Mainstream">
+                            <option value="4500">Intel Core i5-13600KF - ₺4.500</option>
+                            <option value="5200">Intel Core i7-12700KF - ₺5.200</option>
+                            <option value="6800">Intel Core i7-13700KF - ₺6.800</option>
+                        </optgroup>
+                        <optgroup label="Intel High-End">
+                            <option value="8500">Intel Core i9-12900KF - ₺8.500</option>
+                            <option value="9800">Intel Core i9-13900KF - ₺9.800</option>
+                            <option value="12500">Intel Core i9-14900KF - ₺12.500</option>
+                        </optgroup>
+                        <optgroup label="AMD Budget">
+                            <option value="2400">AMD Ryzen 5 5500 - ₺2.400</option>
+                            <option value="3200">AMD Ryzen 5 5600X - ₺3.200</option>
+                            <option value="3800">AMD Ryzen 5 7600X - ₺3.800</option>
+                        </optgroup>
+                        <optgroup label="AMD Mainstream">
+                            <option value="4200">AMD Ryzen 7 5700X - ₺4.200</option>
+                            <option value="5800">AMD Ryzen 7 5800X3D - ₺5.800</option>
+                            <option value="6500">AMD Ryzen 7 7700X - ₺6.500</option>
+                        </optgroup>
+                        <optgroup label="AMD High-End">
+                            <option value="7800">AMD Ryzen 9 5900X - ₺7.800</option>
+                            <option value="9200">AMD Ryzen 9 7900X - ₺9.200</option>
+                            <option value="11500">AMD Ryzen 9 7950X - ₺11.500</option>
+                        </optgroup>
+                    </select>
+                    <div class="price-display" id="cpu-price">₺0</div>
+                </div>
+
+                <div class="component-card">
+                    <div class="component-title">
+                        <span class="component-icon"></span>
+                        <span id="motherboard-title">Anakart</span>
+                    </div>
+                    <select id="motherboard" onchange="updatePrice()">
+                        <option value="0">Seçiniz...</option>
+                        <optgroup label="Budget (AMD)">
+                            <option value="1200">MSI A520M-A PRO - ₺1.200</option>
+                            <option value="1500">ASUS PRIME B450M-A II - ₺1.500</option>
+                            <option value="1800">MSI B450M PRO-VDH MAX - ₺1.800</option>
+                        </optgroup>
+                        <optgroup label="Mainstream (AMD)">
+                            <option value="2200">ASUS PRIME B550M-A - ₺2.200</option>
+                            <option value="2800">MSI MAG B550 TOMAHAWK - ₺2.800</option>
+                            <option value="3500">ASUS ROG STRIX B550-F - ₺3.500</option>
+                        </optgroup>
+                        <optgroup label="High-End (AMD)">
+                            <option value="4200">MSI MAG X570S TOMAHAWK - ₺4.200</option>
+                            <option value="5500">ASUS ROG CROSSHAIR VIII - ₺5.500</option>
+                            <option value="7200">ASUS ROG CROSSHAIR X670E - ₺7.200</option>
+                        </optgroup>
+                        <optgroup label="Budget (Intel)">
+                            <option value="1400">MSI PRO H610M-B - ₺1.400</option>
+                            <option value="1800">ASUS PRIME B660M-A - ₺1.800</option>
+                            <option value="2200">MSI MAG B660M MORTAR - ₺2.200</option>
+                        </optgroup>
+                        <optgroup label="Mainstream (Intel)">
+                            <option value="2800">ASUS PRIME Z690-P - ₺2.800</option>
+                            <option value="3500">MSI MAG Z690 TOMAHAWK - ₺3.500</option>
+                            <option value="4200">ASUS ROG STRIX Z690-F - ₺4.200</option>
+                        </optgroup>
+                        <optgroup label="High-End (Intel)">
+                            <option value="5500">MSI MEG Z690 GODLIKE - ₺5.500</option>
+                            <option value="6800">ASUS ROG MAXIMUS Z790 - ₺6.800</option>
+                            <option value="8500">ASUS ROG MAXIMUS Z790 EXTREME - ₺8.500</option>
+                        </optgroup>
+                    </select>
+                    <div class="price-display" id="motherboard-price">₺0</div>
+                </div>
+
+                <div class="component-card">
+                    <div class="component-title">
+                        <span class="component-icon"></span>
+                        <span id="ram-title">RAM Bellek</span>
+                    </div>
+                    <select id="ram" onchange="updatePrice()">
+                        <option value="0">Seçiniz...</option>
+                        <optgroup label="DDR4 Budget">
+                            <option value="600">8GB DDR4 2666MHz - ₺600</option>
+                            <option value="800">8GB DDR4 3200MHz - ₺800</option>
+                            <option value="1200">16GB DDR4 2666MHz - ₺1.200</option>
+                            <option value="1400">16GB DDR4 3200MHz - ₺1.400</option>
+                        </optgroup>
+                        <optgroup label="DDR4 Performance">
+                            <option value="1800">16GB DDR4 3600MHz RGB - ₺1.800</option>
+                            <option value="2200">32GB DDR4 3200MHz - ₺2.200</option>
+                            <option value="2800">32GB DDR4 3600MHz RGB - ₺2.800</option>
+                            <option value="4200">64GB DDR4 3200MHz - ₺4.200</option>
+                        </optgroup>
+                        <optgroup label="DDR5 Next-Gen">
+                            <option value="1600">16GB DDR5 4800MHz - ₺1.600</option>
+                            <option value="1900">16GB DDR5 5600MHz - ₺1.900</option>
+                            <option value="2400">16GB DDR5 6000MHz RGB - ₺2.400</option>
+                            <option value="2800">32GB DDR5 5600MHz - ₺2.800</option>
+                            <option value="3500">32GB DDR5 6000MHz RGB - ₺3.500</option>
+                            <option value="6800">64GB DDR5 5600MHz - ₺6.800</option>
+                        </optgroup>
+                    </select>
+                    <div class="price-display" id="ram-price">₺0</div>
+                </div>
+
+                <div class="component-card">
+                    <div class="component-title">
+                        <span class="component-icon"></span>
+                        <span id="gpu-title">Ekran Kartı (GPU)</span>
+                    </div>
+                    <select id="gpu" onchange="updatePrice()">
+                        <option value="0">Seçiniz...</option>
+                        <optgroup label="Budget Gaming">
+                            <option value="3200">NVIDIA GTX 1650 - ₺3.200</option>
+                            <option value="4500">NVIDIA GTX 1660 Super - ₺4.500</option>
+                            <option value="4800">AMD RX 6500 XT - ₺4.800</option>
+                            <option value="5500">AMD RX 6600 - ₺5.500</option>
+                        </optgroup>
+                        <optgroup label="1080p Gaming">
+                            <option value="6800">NVIDIA RTX 3060 - ₺6.800</option>
+                            <option value="7200">AMD RX 6600 XT - ₺7.200</option>
+                            <option value="8500">NVIDIA RTX 3060 Ti - ₺8.500</option>
+                            <option value="8800">AMD RX 6700 XT - ₺8.800</option>
+                        </optgroup>
+                        <optgroup label="1440p Gaming">
+                            <option value="9800">NVIDIA RTX 3070 - ₺9.800</option>
+                            <option value="11200">AMD RX 6800 XT - ₺11.200</option>
+                            <option value="12500">NVIDIA RTX 4070 - ₺12.500</option>
+                            <option value="13800">AMD RX 7700 XT - ₺13.800</option>
+                        </optgroup>
+                        <optgroup label="4K Gaming">
+                            <option value="15500">NVIDIA RTX 3080 - ₺15.500</option>
+                            <option value="18000">NVIDIA RTX 4070 Ti - ₺18.000</option>
+                            <option value="22000">NVIDIA RTX 4080 - ₺22.000</option>
+                            <option value="28000">NVIDIA RTX 4090 - ₺28.000</option>
+                            <option value="16800">AMD RX 7800 XT - ₺16.800</option>
+                            <option value="19500">AMD RX 7900 XT - ₺19.500</option>
+                            <option value="24000">AMD RX 7900 XTX - ₺24.000</option>
+                        </optgroup>
+                    </select>
+                    <div class="price-display" id="gpu-price">₺0</div>
+                </div>
+
+            <div class="component-card">
+                <div class="component-title">
+                    <span class="component-icon"></span>
+                    Depolama (SSD)
+                </div>
+                <select id="storage" onchange="updatePrice()">
+                    <option value="0">Seçiniz...</option>
+                    <option value="600">250GB NVMe SSD - ₺600</option>
+                    <option value="900">500GB NVMe SSD - ₺900</option>
+                    <option value="1400">1TB NVMe SSD - ₺1.400</option>
+                    <option value="2200">2TB NVMe SSD - ₺2.200</option>
+                    <option value="1800">1TB Samsung 980 PRO - ₺1.800</option>
+                </select>
+                <div class="price-display" id="storage-price">₺0</div>
+            </div>
+
+            <div class="component-card">
+                <div class="component-title">
+                    <span class="component-icon"></span>
+                    Güç Kaynağı (PSU)
+                </div>
+                <select id="psu" onchange="updatePrice()">
+                    <option value="0">Seçiniz...</option>
+                    <option value="800">500W 80+ Bronze - ₺800</option>
+                    <option value="1200">650W 80+ Gold - ₺1.200</option>
+                    <option value="1600">750W 80+ Gold - ₺1.600</option>
+                    <option value="2200">850W 80+ Platinum - ₺2.200</option>
+                </select>
+                <div class="price-display" id="psu-price">₺0</div>
+            </div>
+
+            <div class="component-card">
+                <div class="component-title">
+                    <span class="component-icon"></span>
+                    Kasa
+                </div>
+                <select id="case" onchange="updatePrice()">
+                    <option value="0">Seçiniz...</option>
+                    <option value="400">Temel ATX Kasa - ₺400</option>
+                    <option value="800">Corsair 4000D - ₺800</option>
+                    <option value="1200">NZXT H510 Elite - ₺1.200</option>
+                    <option value="1800">Lian Li PC-O11 Dynamic - ₺1.800</option>
+                </select>
+                <div class="price-display" id="case-price">₺0</div>
+            </div>
+
+            <div class="component-card">
+                <div class="component-title">
+                    <span class="component-icon"></span>
+                    CPU Soğutucu
+                </div>
+                <select id="cooler" onchange="updatePrice()">
+                    <option value="0">Seçiniz...</option>
+                    <option value="200">Stock Soğutucu - ₺200</option>
+                    <option value="400">Cooler Master Hyper 212 - ₺400</option>
+                    <option value="800">Noctua NH-D15 - ₺800</option>
+                    <option value="1200">Corsair H100i RGB - ₺1.200</option>
+                    <option value="1800">NZXT Kraken X63 - ₺1.800</option>
+                </select>
+                <div class="price-display" id="cooler-price">₺0</div>
+            </div>
+        </div>
+
+        <div class="total-section">
+            <div class="total-price" id="total-price">₺0</div>
+            <p>Toplam Sistem Fiyatı</p>
+            <button class="build-button" onclick="showSpecs()">🚀 Sistemi Oluştur</button>
+        </div>
+
+        <div class="specs-summary" id="specs-summary" style="display: none;">
+            <h3>📋 Sistem Özellikleri</h3>
+            <div id="specs-list"></div>
+        </div>
+    </div>
+
+    <script>
+        function updatePrice() {
+            const components = ['cpu', 'motherboard', 'ram', 'gpu', 'storage', 'psu', 'case', 'cooler'];
+            let total = 0;
+
+            components.forEach(component => {
+                const select = document.getElementById(component);
+                const price = parseInt(select.value) || 0;
+                total += price;
+                
+                const priceDisplay = document.getElementById(component + '-price');
+                priceDisplay.textContent = price > 0 ? `₺${price.toLocaleString('tr-TR')}` : '₺0';
+            });
+
+            document.getElementById('total-price').textContent = `₺${total.toLocaleString('tr-TR')}`;
+        }
+
+        function showSpecs() {
+            const components = {
+                'cpu': 'İşlemci',
+                'motherboard': 'Anakart', 
+                'ram': 'RAM',
+                'gpu': 'Ekran Kartı',
+                'storage': 'Depolama',
+                'psu': 'Güç Kaynağı',
+                'case': 'Kasa',
+                'cooler': 'Soğutucu'
+            };
+
+            let specsList = '';
+            let hasComponents = false;
+
+            Object.keys(components).forEach(component => {
+                const select = document.getElementById(component);
+                if (select.value !== '0') {
+                    const selectedText = select.options[select.selectedIndex].text;
+                    specsList += `
+                        <div class="spec-item">
+                            <span>${components[component]}:</span>
+                            <span>${selectedText}</span>
+                        </div>
+                    `;
+                    hasComponents = true;
+                }
+            });
+
+            if (hasComponents) {
+                document.getElementById('specs-list').innerHTML = specsList;
+                document.getElementById('specs-summary').style.display = 'block';
+                document.getElementById('specs-summary').scrollIntoView({ behavior: 'smooth' });
+            } else {
+                alert('Lütfen önce bileşenleri seçiniz!');
+            }
+        }
+
+        // Sayfa yüklendiğinde fiyatları güncelle
+        updatePrice();
+    </script>
+</body>
+</html>
